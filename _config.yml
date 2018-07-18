@@ -1,112 +1,65 @@
-# main text of home
-name: Jack
-bio: Force on Java , Go , Node JS , and interested in DDD
+title: Page
+header-img: "img/autumn2.jpg"
+tagline: ""  
+description: "Stay  hungry，Stay  foolish!"  
+baseurl: ""
 
-# twitter summary info
-description: Force on Java , Go , Node JS , and interested in DDD
+# url: http://stardust.cat
+# enforce_ssl: true
 
-# if it's an external image, update below for true
-# better with square images
-external-image: false
-picture: assets/images/profile.jpg
+# About/contact
+owner: 
+  name: "lqjack"
+  email: lqjacklee@gmail.cn
 
-# If you want to include your resume, set to true
-# and specify source (external or local).
-resume: false
-resume-external: true
-resume-url: https://google.com/?q=my+resume
+# Data
+gavatar: https://dreamofbook.qiniudn.com/Az..png
+favicon: img/favicon.ico
 
-url: https://lqjack.github.io
-# your url: http://USERNAME.github.io
+douban_username: lqjacklee
+twitter_username: lqjacklee  
+github_username: lqjack  
+facebook_username: lqjacklee  
+weibo_username: lqjacklee  
+zhihu_username: lqjacklee  
 
-permalink: :year/:month/:day/:title/
+markdown: kramdown
+kramdown:
+  input: GFM
+highlighter: rouge
 
-# To enable google analytics, supply your token below
-# analytics-google: 'UA-MYANALYTICS'
+gems: 
+- jekyll-gallery-generator
+- jekyll-paginate
+permalink: none
+paginate: 8
+exclude: ["less","node_modules","Gruntfile.js","package.json","README.md"]
 
-# To enable piwik tracking, supply your url & site ID below
-# analytics-piwik-url: 'piwik.my-host.com'
-# analytics-piwik-id: 1
+timezone: Asia/Shanghai
 
-# if you don't want comments in your posts, leave categories empty
-disqus:
-  shortname: jackleetom # enter this from your disqus account
-  categories: [blog, project] # only show disqus for posts that have these categories
+# Defaults for posts
+defaults:
+  -
+    scope: 
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      author: "Jack"
+      header-img: "img/fantasy.jpg"
 
-# if you don't have any of social below, comment the line
-# facebook: 
-# twitter: 
-google: 112580169240521263608
-# instagram: myinstagram
-# pinterest: mypinterest
-# linkedin: mylinkedin
-# youtube: myyoutube
-# spotify: myspotify
-github: lqjack
-# lastfm: mylastfm
-# stackoverflow: 7044681/mystackoverflow
-# quora: userquora
-# reddit: username
-# medium: medium
-# vimeo: myvimeo
-# lanyrd: mylanyrd
-email: lqjacklee@126.com
+# Comments 
+comments :
+  provider : disqus
+  duoshuo :
+    short_name : Jack
+  disqus :
+      short_name : Jack
 
-authors:
-    johndoe:
-        name: John Doe
-        bio: A Man who travels the world eating noodles
-        external-image: false
-        picture: assets/images/profile.jpg
-        twitter: johndoe
-    jamesfoster:
-        name: James Foster
-        bio: A Man who develops software with coffee
-        external-image: false
-        picture: assets/images/james.jpg
-        twitter: jamesfoster
+# Analytics and webmaster tools stuff goes here
+google_analytics: UA-66863061-1
+google_verify:
+# https://ssl.bing.com/webmaster/configure/verify/ownership Option 2 content= goes here
+bing_verify:
 
-# do you want a larger site? change the option below
-# options: [normal, large] | default: normal
-# normal = 560px / large = 810px
-width: normal
-
-# if you don't need pagination, comment the *paginate* configs below
-paginate: 5
-paginate_path: "blog/:num/"
-
-# if you don't need projects, comment the *projects* configs below
-projects: true
-
-# if you don't need "about" or "blog", comment them out below
-about: true
-blog: true
-
-# do you want to show the "read time" of the posts?
-read-time: true
-
-# do you want to show the "tags" inside the posts?
-show-tags: true
-
-# related posts inside a post?
-related: true
-
-# Display links for next and previous posts for the specified categories
-post-advance-links: [blog]
-
-# show author block at the end of a post ?
-show-author: true
-
-# do you want some animations?
-animation: true
-
-plugins:
-  - jekyll-seo-tag
-  - jekyll-gist
-  - jekyll-feed
-  - jemoji
-  - jekyll-admin
-  - jekyll-paginate
-
-jekyll-mentions:
-    base_url: https://github.com
+# Links to include in footer navigation

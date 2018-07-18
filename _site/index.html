@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Stay  hungry，Stay  foolish!">
+
+    <title>Page</title>
+
+    <link rel="canonical" href="http://localhost:4000/">
+
+    <!-- Icons -->
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Page</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/About.html">About</a>
+                </li>
+                
+                <li>
+                    <a href="/tags.html">Tags</a>
+                </li>
+                
+                <li>
+                    <a href="/photos/">Photos</a>
+                </li>
+                
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Page Header -->
+<header class="intro-header" style="background-image: url('/img/autumn2.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="site-heading">
+                    <h1>Page</h1>
+                    <hr class="small">
+                    <span class="subheading">在遙遠的地方 一切虔誠終必相遇</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+	<div class="row">
+		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+			
+<div class="post-preview">
+    <a href="/blog/Sync-Block.html">
+        <h2 class="post-title">            
+            同步异步、阻塞非阻塞
+        </h2>
+        
+        <div class="post-content-preview">
+            同步与异步
+同步/异步, 它们是消息的通知机制
+
+概念解释
+同步
+所谓同步，就是在发出一个功能调用时，在没有得到结果之前，该调用就不返回。
+
+按照这个定义，其实绝大多数函数都是同步调用（例如sin isdigit等）。
+但是一般而言，我们在说同步、异步的时候，特指那些需要其他部件协作或者需要一...
+        </div>
+    </a>
+    <p class="post-meta">Posted by Jack on February 24, 2016</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/blog/Thread-Pool.html">
+        <h2 class="post-title">            
+            线程池
+        </h2>
+        
+        <div class="post-content-preview">
+            1 Exectors.newCachedThreadPool(无界线程池，可以进行自动回收)
+无界队列，阻塞队列使用SynchronousQueue（每个插入操作对应一个移除操作)
+
+	public static ExecutorService newCachedThreadPool() { ...
+        </div>
+    </a>
+    <p class="post-meta">Posted by Jack on February 24, 2016</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/blog/Distribute-session.html">
+        <h2 class="post-title">            
+            分布式Session
+        </h2>
+        
+        <div class="post-content-preview">
+            1、Session生命周期
+
+
+创建
+Session创建再服务端，当请求JSP,Servlet时候才会创建（包含SessionId)，默认情况下服务端会将JSESSIONID通过Cookie发送给客户端，一般maxAge属性为-1,表示仅对当前浏览器有效，各个浏览器窗口不共享，关闭浏览器就会失...
+        </div>
+    </a>
+    <p class="post-meta">Posted by Jack on February 24, 2016</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/blog/nio-buffer.html">
+        <h2 class="post-title">            
+            NIO Buffer
+        </h2>
+        
+        <div class="post-content-preview">
+            内部元素
+
+  内容： 包含基本类型，线性、有限特定基本类型序列。
+  容量（capacity) : Buffer对象最大能写入的大小、不变量。
+  最大读取位置(limit) : Buffer对象当前写入的最大位置，读取时候最大的读取位置。
+  当前位置(position) : 当前索引，下...
+        </div>
+    </a>
+    <p class="post-meta">Posted by Jack on February 24, 2016</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/blog/Java-Concurrent-Best-Practise.html">
+        <h2 class="post-title">            
+            线程总结
+        </h2>
+        
+        <div class="post-content-preview">
+            线程同步：
+
+  不变形
+  枷锁
+  线程封闭
+  栈封闭
+
+
+Deque BlockDeque
+
+线程窃取
+线程状态：
+
+  新建
+  就绪
+  阻塞
+  运行
+  死亡
+
+
+ConcurrentHashMap&lt;String,Future&lt;?&gt;&gt;
+
+可变状态是至关重...
+        </div>
+    </a>
+    <p class="post-meta">Posted by Jack on February 24, 2016</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/blog/Performance-JVM.html">
+        <h2 class="post-title">            
+            JVM架构
+        </h2>
+        
+        <div class="post-content-preview">
+            JVM内存分配与使用受限于物理内存以及操作系统
+-XX:UserCompressedOops 压缩指针
+-XX:+AggressiveOpts 添加设置额外的性能优化
+
+VM生命周期：
+
+
+  启动器
+
+java ,javaw (windows platform),JNI_CreateJava...
+        </div>
+    </a>
+    <p class="post-meta">Posted by Jack on February 24, 2016</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/blog/performance-os.html">
+        <h2 class="post-title">            
+            性能调优-操作系统篇
+        </h2>
+        
+        <div class="post-content-preview">
+            性能监控
+以一种非入侵的方式收集或者查看应用性能数据的活动。监控通常是一种在生产、质量评估或者开发环境中实施的带有预防性或者主动性的活动。
+
+CPU使用率
+
+  用户态和系统态。用户态CPU使用率：执行应用程序代码的时间占总CPU时间的百分比。系统CPU使用率：执行系统调用的时间占总CPU时间...
+        </div>
+    </a>
+    <p class="post-meta">Posted by Jack on February 24, 2016</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/blog/JVM-memory.html">
+        <h2 class="post-title">            
+            JVM内存布局
+        </h2>
+        
+        <div class="post-content-preview">
+            1、程序计数器
+
+当前线程所执行字节码指示器。
+字节码解释是通过改变这个计数器的值来选择下一条所需要执行的字节码指令，分支、循环、跳转、异常处理、线程恢复。
+
+每个线程有独立的程序计数器。
+
+2、Java虚拟栈
+
+线程私有，每个方法在执行同时会创建一个栈帧，用于存储局部变量、操作数栈、动态链接...
+        </div>
+    </a>
+    <p class="post-meta">Posted by Jack on February 24, 2016</p>
+</div>
+
+<hr>
+
+
+<!-- Pager -->
+
+<ul class="pager">
+    
+    
+    <li class="next">
+        <a href="/page2">Older Posts &rarr;</a>
+    </li>
+    
+</ul>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-66863061-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+
+		</div>
+	</div>
+</div>
+
+<hr>
+
+  
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!--
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://twitter.com/lqjacklee">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                    
+                    <li>
+                        <a href="https://github.com/lqjack">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <!--
+                    
+                    <li>
+                        <a href="http://www.douban.com/people/lqjacklee">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-douban fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a href="https://www.facebook.com/lqjacklee">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/lqjacklee">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="http://weibo.com/lqjacklee">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                &copy; 2011~2018 lqjack ♪ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+
+
+</body>
+
+</html>
