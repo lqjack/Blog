@@ -1,0 +1,1575 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="https://www.w3.org/2005/Atom">
+	<channel>
+		<title>Page</title>
+		<description>Stay  hungry，Stay  foolish!</description>
+		<link>/</link>
+		<atom:link href="/" rel="self" type="application/rss+xml" />
+		
+			<item>
+				<title>同步异步、阻塞非阻塞</title>
+				<description>&lt;h2 id=&quot;同步与异步&quot;&gt;同步与异步&lt;/h2&gt;
+&lt;p&gt;同步/异步, 它们是消息的通知机制&lt;/p&gt;
+
+&lt;h4 id=&quot;概念解释&quot;&gt;概念解释&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;同步&lt;/strong&gt;
+所谓同步，就是在发出一个功能调用时，在没有得到结果之前，该调用就不返回。&lt;/p&gt;
+
+&lt;p&gt;按照这个定义，其实绝大多数函数都是同步调用（例如sin isdigit等）。
+但是一般而言，我们在说同步、异步的时候，特指那些需要其他部件协作或者需要一定时间完成的任务。
+最常见的例子就是 SendMessage。
+该函数发送一个消息给某个窗口，在对方处理完消息之前，这个函数不返回。
+当对方处理完毕以后，该函数才把消息处理函数所返回的值返回给调用者。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;异步&lt;/strong&gt;
+异步的概念和同步相对。
+当一个异步过程调用发出后，调用者不会立刻得到结果。
+实际处理这个调用的部件是在调用发出后，
+通过状态、通知来通知调用者，或通过回调函数处理这个调用。&lt;/p&gt;
+
+&lt;p&gt;以 Socket为例，
+当一个客户端通过调用 Connect函数发出一个连接请求后，调用者线程不用等待结果，可立刻继续向下运行。
+当连接真正建立起来以后，socket底层会发送一个消息通知该对象。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;三种返回结果途径&lt;/strong&gt; 
+执行部件和调用者可以通过三种途径返回结果：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;状态、&lt;/li&gt;
+  &lt;li&gt;通知、&lt;/li&gt;
+  &lt;li&gt;回调函数。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;可以使用哪一种依赖于执行部件的实现，除非执行部件提供多种选择，否则不受调用者控制。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;如果执行部件用状态来通知，那么调用者就需要每隔一定时间检查一次，效率就很低有些初学多线程编程的人，总喜欢用一个循环去检查某个变量的值，这其实是一种很严重的错误。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;如果是使用通知的方式，效率则很高，因为执行部件几乎不需要做额外的操作。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;至于回调函数，和通知没太多区别。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;举例说明&quot;&gt;举例说明&lt;/h4&gt;
+&lt;p&gt;理解这两个概念，可以用去银行办理业务(可以取钱，也可以存钱)来比喻:
+当到银行后,
+.可以去ATM机前排队等候                                – (排队等候)就是同步等待消息
+.可以去大厅拿号,等到排到我的号时，
+ 柜台的人会通知我轮到我去办理业务.              – (等待别人通知)就是异步等待消息.&lt;/p&gt;
+
+&lt;p&gt;在异步消息通知机制中,
+等待消息者(在这个例子中就是等待办理业务的人)往往注册一个回调机制,
+在所等待的事件被触发时由触发机制(在这里是柜台的人)通过某种机制(在这里是写在小纸条上的号码)
+找到等待该事件的人.&lt;/p&gt;
+
+&lt;p&gt;在select/poll 等IO 多路复用机制中就是fd,
+当消息被触发时,触发机制通过fd 找到处理该fd的处理函数.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;在实际的程序中,
+同步消息通知机制：就好比简单的read/write 操作,它们需要等待这两个操作成功才能返回;
+               同步, 是由处理消息者自己去等待消息是否被触发;
+异步消息通知机制：类似于select/poll 之类的多路复用IO 操作,
+               当所关注的消息被触发时,由消息触发机制通知触发对消息的处理.
+               异步, 由触发机制来通知处理消息者;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;还是回到上面的例子,
+轮到你办理业务, 这个就是你关注的消息,
+而办理什么业务, 就是对这个消息的处理,
+两者是有区别的.&lt;/p&gt;
+
+&lt;p&gt;而在真实的IO 操作时: 所关注的消息就是     该fd是否可读写,
+                     而对消息的处理是     对这个fd 进行读写.&lt;/p&gt;
+
+&lt;p&gt;同步/异步仅仅关注的是如何通知消息,它们对如何处理消息并不关心,
+好比说,银行的人仅仅通知你轮到你办理业务了,
+而办理业务什么业务(存钱还是取钱)他们是不知道的.&lt;/p&gt;
+
+&lt;p&gt;二、阻塞与非阻塞
+阻塞/非阻塞, 它们是程序在等待消息(无所谓同步或者异步)时的状态.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;概念解释
+A. 阻塞
+阻塞调用是指调用结果返回之前，当前线程会被挂起。函数只有在得到结果之后才会返回。
+有人也许会把阻塞调用和同步调用等同起来，实际上他是不同的。
+对于同步调用来说，很多时候当前线程还是激活的，只是从逻辑上当前函数没有返回而已。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;socket接收数据函数recv是一个阻塞调用的例子。
+当socket工作在阻塞模式的时候， 如果没有数据的情况下调用该函数，则当前线程就会被挂起，直到有数据为止。&lt;/p&gt;
+
+&lt;p&gt;B. 非阻塞
+非阻塞和阻塞的概念相对应，指在不能立刻得到结果之前，该函数不会阻塞当前线程，而会立刻返回。&lt;/p&gt;
+
+&lt;p&gt;C. 对象的阻塞模式和阻塞函数调用
+对象是否处于阻塞模式和函数是不是阻塞调用有很强的相关性，但是并不是一一对应的。&lt;/p&gt;
+
+&lt;p&gt;阻塞对象上可以有非阻塞的调用方式，我们可以通过一定的API去轮询状态，
+在适当的时候调用阻塞函数，就可以避免阻塞。
+而对于非阻塞对象，调用特殊的函数也可以进入阻塞调用。函数select就是这样的一个例子。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;举例说明
+继续上面的那个例子,
+不论是排队等待，还是使用号码等待通知,
+如果在这个等待的过程中,
+. 等待者除了等待消息之外不能做其它的事情,那么该机制就是阻塞的,
+  表现在程序中,也就是该程序一直阻塞在该函数调用处不能继续往下执行.
+. 相反,有的人喜欢在银行办理这些业务的时候一边打打电话发发短信一边等待,这样的状态就是非阻塞的,
+  因为他(等待者)没有阻塞在这个消息通知上,而是一边做自己的事情一边等待.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;三、易混淆的点
+很多人也会把异步和非阻塞混淆,
+因为异步操作一般都不会在真正的IO 操作处被阻塞,
+比如如果用select 函数,当select 返回可读时再去read 一般都不会被阻塞
+就好比当你的号码排到时一般都是在你之前已经没有人了,所以你再去柜台办理业务就不会被阻塞.
+可见,同步/异步与阻塞/非阻塞是两组不同的概念,它们可以共存组合,&lt;/p&gt;
+
+&lt;p&gt;而很多人之所以把同步和阻塞混淆,我想也是因为没有区分这两个概念,
+比如阻塞的read/write 操作中,其实是把消息通知和处理消息结合在了一起,
+在这里所关注的消息就是fd 是否可读/写,而处理消息则是对fd 读/写.
+当我们将这个fd 设置为非阻塞的时候,read/write 操作就不会在等待消息通知这里阻塞,
+如果fd 不可读/写则操作立即返回.&lt;/p&gt;
+
+&lt;p&gt;四、同步/异步与阻塞/非阻塞的组合分析
+&lt;strong&gt;__&lt;/strong&gt;&lt;em&gt;阻塞&lt;/em&gt;&lt;strong&gt;__&lt;/strong&gt;&lt;strong&gt;__&lt;/strong&gt;&lt;strong&gt;__&lt;/strong&gt;&lt;em&gt;非阻塞&lt;/em&gt;&lt;em&gt;__&lt;/em&gt;
+同步 | 同步阻塞              同步非阻塞
+异步 | 异步阻塞              异步非阻塞&lt;/p&gt;
+
+&lt;p&gt;同步阻塞形式:
+  效率是最低的，
+  拿上面的例子来说，就是你专心排队，什么别的事都不做。&lt;/p&gt;
+
+&lt;p&gt;实际程序中
+  就是未对fd 设置O_NONBLOCK 标志位的read/write 操作,&lt;/p&gt;
+
+&lt;p&gt;异步阻塞形式:
+  如果在银行等待办理业务的人采用的是异步的方式去等待消息被触发,也就是领了一张小纸条,
+  假如在这段时间里他不能离开银行做其它的事情,那么很显然,这个人被阻塞在了这个等待的操作上面;&lt;/p&gt;
+
+&lt;p&gt;异步操作是可以被阻塞住的,只不过它不是在处理消息时阻塞,而是在等待消息被触发时被阻塞.
+  比如select 函数,
+  假如传入的最后一个timeout 参数为NULL,那么如果所关注的事件没有一个被触发,
+  程序就会一直阻塞在这个select 调用处.&lt;/p&gt;
+
+&lt;p&gt;同步非阻塞形式:
+  实际上是效率低下的,
+  想象一下你一边打着电话一边还需要抬头看到底队伍排到你了没有,
+  如果把打电话和观察排队的位置看成是程序的两个操作的话,
+  这个程序需要在这两种不同的行为之间来回的切换,效率可想而知是低下的;&lt;/p&gt;
+
+&lt;p&gt;很多人会写阻塞的read/write 操作,
+  但是别忘了可以对fd 设置O_NONBLOCK 标志位,这样就可以将同步操作变成非阻塞的了;&lt;/p&gt;
+
+&lt;p&gt;异步非阻塞形式:
+  效率更高,
+  因为打电话是你(等待者)的事情,而通知你则是柜台(消息触发机制)的事情,
+  程序没有在两种不同的操作中来回切换.&lt;/p&gt;
+
+&lt;p&gt;比如说，这个人突然发觉自己烟瘾犯了,需要出去抽根烟,
+  于是他告诉大堂经理说,排到我这个号码的时候麻烦到外面通知我一下(注册一个回调函数),
+  那么他就没有被阻塞在这个等待的操作上面,自然这个就是异步+非阻塞的方式了.&lt;/p&gt;
+
+&lt;p&gt;如果使用异步非阻塞的情况,
+  比如aio_*组的操作,当发起一个aio_read 操作时,函数会马上返回不会被阻塞,
+  当所关注的事件被触发时会调用之前注册的回调函数进行处理,&lt;/p&gt;
+</description>
+				<pubDate>Wed, 24 Feb 2016 22:44:00 +0800</pubDate>
+				<link>/blog/Sync-Block.html</link>
+				<guid isPermaLink="true">/blog/Sync-Block.html</guid>
+			</item>
+		
+			<item>
+				<title>线程池</title>
+				<description>&lt;p&gt;1 Exectors.newCachedThreadPool(无界线程池，可以进行自动回收)
+&lt;small&gt;无界队列，阻塞队列使用SynchronousQueue（每个插入操作对应一个移除操作)&lt;/small&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ExecutorService&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;newCachedThreadPool&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  
+		&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ThreadPoolExecutor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MAX_VALUE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;60L&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; 
+		&lt;span class=&quot;n&quot;&gt;TimeUnit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;SECONDS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SynchronousQueue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Runnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;());&lt;/span&gt;  
+	&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;2 Exectors.newFixedThreadPool(固定线程池)
+&lt;small&gt;corePoolSize和maximumPoolSize的大小是一样的，不想实现Keep alive，队列无界。&lt;/small&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ExecutorService&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;newFixedThreadPool&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nThreads&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  
+		&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ThreadPoolExecutor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nThreads&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nThreads&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0L&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; 
+		&lt;span class=&quot;n&quot;&gt;TimeUnit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MILLISECONDS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LinkedBlockingQueue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Runnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;());&lt;/span&gt;  
+	&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;3 Exectors.newSingleThreadPool(单个线程池)&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ExecutorService&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;newSingleThreadExecutor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  
+		&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;FinalizableDelegatedExecutorService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ThreadPoolExecutor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0L&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; 
+		&lt;span class=&quot;n&quot;&gt;TimeUnit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MILLISECONDS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LinkedBlockingQueue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Runnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;()));&lt;/span&gt;  
+	&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;**BlockingQueue&lt;Runnable&gt;**&lt;/Runnable&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;如果运行的线程少于 corePoolSize，则 Executor 始终首选添加新的线程，而不进行排队。（如果当前运行的线程小于corePoolSize，则任务根本不会存放，添加到queue中。而是开始运行）&lt;/li&gt;
+  &lt;li&gt;如果运行的线程等于或多于 corePoolSize，则 Executor 始终首选将请求加入队列，而不添加新的线程。&lt;/li&gt;
+  &lt;li&gt;如果无法将请求加入队列，则创建新的线程，除非创建此线程超出maximumPoolSize，在这种情况下，任务将被拒绝。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;排队有三种通用策略：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;直接提交。工作队列的默认选项是 SynchronousQueue，它将任务直接提交给线程而不保持它们。在此，如果不存在可用于立即运行任务的线程，则试图把任务加入队列将失败，因此会构造一个新的线程。此策略可以避免在处理可能具有内部依赖性的请求集时出现锁。直接提交时，通常要求无界，maximumPoolSizes以避免拒绝新提交的任务。当命令以超过队列所能处理的平均数连续到达时，此策略允许无界线程具有增长的可能性。&lt;/li&gt;
+  &lt;li&gt;无界队列。使用无界队列（例如，不具有预定义容量的 LinkedBlockingQueue）将导致在所有 corePoolSize 线程都忙时新任务在队列中等待。这样，创建的线程就不会超过 corePoolSize。（因此，maximumPoolSize 的值也就无效了。）当每个任务完全独立于其他任务，即任务执行互不影响时，适合于使用无界队列；例如，在 Web 页服务器中。这种排队可用于处理瞬态突发请求，当命令以超过队列所能处理的平均数连续到达时，此策略允许无界线程具有增长的可能性。&lt;/li&gt;
+  &lt;li&gt;有界队列。当使用有限的 maximumPoolSizes 时，有界队列（如 ArrayBlockingQueue）有助于防止资源耗尽，但是可能较难调整和控制。队列大小和最大池大小可能需要相互折衷：使用大型队列和小型池可以最大限度地降低 CPU使用率、操作系统资源和上下文切换开销，但是可能导致人工降低吞吐量。如果任务频繁阻塞（例如，如果它们是 I/O 边界），则系统可能为超过您许可的更多线程安排时间。使用小型队列通常要求较大的池大小，CPU使用率较高，但是可能遇到不可接受的调度开销，这样也会降低吞吐量。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;
+例子一：使用直接提交策略，也即SynchronousQueue。
+ 
+首先SynchronousQueue是无界的，也就是说他存数任务的能力是没有限制的，但是由于该Queue本身的特性，在某次添加元素后必须等待其他线程取走后才能继续添加。在这里不是核心线程便是新创建的线程，但是我们试想一样下，下面的场景。
+&lt;/p&gt;
+&lt;p&gt;我们使用一下参数构造ThreadPoolExecutor：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;new ThreadPoolExecutor(  
+				2, 3, 30, TimeUnit.SECONDS,   
+				new SynchronousQueue&amp;lt;Runnable&amp;gt;(),   
+				new RecorderThreadFactory(&quot;CookieRecorderPool&quot;),   
+				new ThreadPoolExecutor.CallerRunsPolicy());
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当核心线程已经有2个正在运行.此时继续来了一个任务（A），根据前面介绍的“如果运行的线程等于或多于 corePoolSize，则 Executor 始终首选将请求加入队列，而不添加新的线程。”,所以A被添加到queue中。
+又来了一个任务（B），且核心2个线程还没有忙完，OK，接下来首先尝试1中描述，但是由于使用的SynchronousQueue，所以一定无法加入进去。
+此时便满足了上面提到的“如果无法将请求加入队列，则创建新的线程，除非创建此线程超出maximumPoolSize，在这种情况下，任务将被拒绝。”，所以必然会新建一个线程来运行这个任务。
+暂时还可以，但是如果这三个任务都还没完成，连续来了两个任务，第一个添加入queue中，后一个呢？queue中无法插入，而线程数达到了maximumPoolSize，所以只好执行异常策略了。
+所以在使用SynchronousQueue通常要求maximumPoolSize是无界的，这样就可以避免上述情况发生（如果希望限制就直接使用有界队列）。对于使用SynchronousQueue的作用jdk中写的很清楚：此策略可以避免在处理可能具有内部依赖性的请求集时出现锁。
+(如果你的任务A1，A2有内部关联，A1需要先运行，那么先提交A1，再提交A2，当使用SynchronousQueue我们可以保证，A1必定先被执行，在A1么有被执行前，A2不可能添加入queue中)&lt;/p&gt;
+
+&lt;p&gt;例子二：使用无界队列策略，即LinkedBlockingQueue&lt;/p&gt;
+
+&lt;p&gt;这个就拿newFixedThreadPool来说，根据前文提到的规则：
+ 写道
+如果运行的线程少于 corePoolSize，则 Executor 始终首选添加新的线程，而不进行排队。
+ 那么当任务继续增加，会发生什么呢？
+ 写道&lt;/p&gt;
+
+&lt;p&gt;如果运行的线程等于或多于 corePoolSize，则 Executor 始终首选将请求加入队列，而不添加新的线程。
+ OK，此时任务变加入队列之中了，那什么时候才会添加新线程呢？&lt;/p&gt;
+
+&lt;p&gt;写道
+如果无法将请求加入队列，则创建新的线程，除非创建此线程超出 maximumPoolSize，在这种情况下，任务将被拒绝。
+这里就很有意思了，可能会出现无法加入队列吗？不像SynchronousQueue那样有其自身的特点，对于无界队列来说，总是可以加入的（资源耗尽，当然另当别论）。换句说，永远也不会触发产生新的线程！corePoolSize大小的线程数会一直运行，忙完当前的，就从队列中拿任务开始运行。所以要防止任务疯长，比如任务运行的实行比较长，而添加任务的速度远远超过处理任务的时间，而且还不断增加，如果任务内存大一些，不一会儿就爆了，呵呵。&lt;/p&gt;
+
+&lt;p&gt;可以仔细想想哈。&lt;/p&gt;
+
+&lt;p&gt;例子三：有界队列，使用ArrayBlockingQueue。&lt;/p&gt;
+
+&lt;p&gt;这个是最为复杂的使用，所以JDK不推荐使用也有些道理。与上面的相比，最大的特点便是可以防止资源耗尽的情况发生。&lt;/p&gt;
+
+&lt;p&gt;举例来说，请看如下构造方法：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;new ThreadPoolExecutor(  
+            2, 4, 30, TimeUnit.SECONDS,   
+            new ArrayBlockingQueue&amp;lt;Runnable&amp;gt;(2),   
+            new RecorderThreadFactory(&quot;CookieRecorderPool&quot;),   
+            new ThreadPoolExecutor.CallerRunsPolicy());  
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;假设，所有的任务都永远无法执行完。&lt;/p&gt;
+
+&lt;p&gt;对于首先来的A,B来说直接运行，接下来，如果来了C,D，他们会被放到queu中，如果接下来再来E,F，则增加线程运行E，F。但是如果再来任务，队列无法再接受了，线程数也到达最大的限制了，所以就会使用拒绝策略来处理。&lt;/p&gt;
+
+&lt;p&gt;小结：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;ThreadPoolExecutor的使用还是很有技巧的。&lt;/li&gt;
+  &lt;li&gt;使用无界queue可能会耗尽系统资源。&lt;/li&gt;
+  &lt;li&gt;使用有界queue可能不能很好的满足性能，需要调节线程数和queue大小&lt;/li&gt;
+  &lt;li&gt;线程数自然也有开销，所以需要根据不同应用进行调节。&lt;/li&gt;
+  &lt;li&gt;通常来说对于静态任务可以归为：&lt;/li&gt;
+  &lt;li&gt;数量大，但是执行时间很短&lt;/li&gt;
+  &lt;li&gt;数量小，但是执行时间较长&lt;/li&gt;
+  &lt;li&gt;数量又大执行时间又长&lt;/li&gt;
+  &lt;li&gt;除了以上特点外，任务间还有些内在关系&lt;/li&gt;
+  &lt;li&gt;看完这篇问文章后，希望能够可以选择合适的类型了&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;估算线程池大小：&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;最佳线程数目 = （（线程等待时间+线程CPU时间）/线程CPU时间 ）* CPU数目
+或者 最佳线程数目 = （线程等待时间与线程CPU时间之比 + 1）* CPU数目&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;依据：线程等待时间所占比例越高，需要越多线程。线程CPU时间所占比例越高，需要越少线程。
+一个系统最快的部分是CPU，所以决定一个系统吞吐量上限的是CPU。增强CPU处理能力，可以提高系统吞吐量上限。但根据短板效应，真实的系统吞吐量并不能单纯根据CPU来计算。那要提高系统吞吐量，就需要从“系统短板”（比如网络延迟、IO）着手：
+尽量提高短板操作的并行化比率，比如多线程下载技术
+增强短板能力，比如用NIO替代IO&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+</description>
+				<pubDate>Wed, 24 Feb 2016 22:44:00 +0800</pubDate>
+				<link>/blog/Thread-Pool.html</link>
+				<guid isPermaLink="true">/blog/Thread-Pool.html</guid>
+			</item>
+		
+			<item>
+				<title>分布式Session</title>
+				<description>&lt;h1 id=&quot;1session生命周期&quot;&gt;1、Session生命周期&lt;/h1&gt;
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;创建&quot;&gt;创建&lt;/h2&gt;
+&lt;p&gt;Session创建再服务端，当请求JSP,Servlet时候才会创建（包含SessionId)，默认情况下服务端会将JSESSIONID通过Cookie发送给客户端，一般maxAge属性为-1,表示仅对当前浏览器有效，各个浏览器窗口不共享，关闭浏览器就会失效。因此同一机器的两个浏览器窗口访问服务器时，会生成两个不同的Session。但是由浏览器窗口内的链接、脚本等打开的新窗口（也就是说不是双击桌面浏览器图标等打开的窗口）除外。这类子窗口会共享父窗口的Cookie，因此会共享一个Session。只访问HTML,图片等静态资源不会创建。&lt;/p&gt;
+
+&lt;p&gt;注意：新开的浏览器窗口会生成新的Session，但子窗口除外。子窗口会共用父窗口的Session。例如，在链接上右击，在弹出的快捷菜单中选择”在新窗口中打开”时，子窗口便可以访问父窗口的Session。&lt;/p&gt;
+
+&lt;p&gt;再次访问时候，会将JSESSIONID放置在请求头中发送。Session根据该Cookie值是否同一用户。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;	request.getSession(true);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;若包含参数true,服务器会先从请求中查看是否包含sessionId。若找到对应的Session则直接返回，否则创建一个新的session对象。
+若参数为false,若找不到sessionId对应的对象，则返回null。&lt;/p&gt;
+
+&lt;p&gt;若用户禁用Cookie时候，不能通过服务端通过客户端保存SessionID，可以通过URL重写或者隐藏字段发送请求。可以使用以下语句是否为true,判断客户端是否启用Cookie:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-JavaScript&quot;&gt;	navigator.cookieEnabled
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;销毁&quot;&gt;销毁&lt;/h2&gt;
+&lt;p&gt;设置Session超时时间有以下三种方式：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;方法体内的参数interval为秒。
+    &lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;HttpSession ses = request.getSession();
+session.setMaxInactiveInterval(interval);
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/li&gt;
+  &lt;li&gt;web.xml里配置如下信息
+    &lt;pre&gt;&lt;code class=&quot;language-XML&quot;&gt; &amp;lt;session-config&amp;gt;
+     &amp;lt;session-timeout&amp;gt;时间长度（单位为分钟）&amp;lt;/session-timeout&amp;gt;
+ &amp;lt;/session-config&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/li&gt;
+  &lt;li&gt;在tomcat/conf/server.xml中定义defaultSessionTimeOut=时间长度（分钟），默认是30分钟。
+三种方式中当值为-1时，session永不失效。优先级：(1)&amp;gt;(2)&amp;gt;(3)。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;服务器会把超时的session进行清除。&lt;/li&gt;
+  &lt;li&gt;调用session.invalidate()。&lt;/li&gt;
+  &lt;li&gt;服务器进程被停止.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;2cookie应用&quot;&gt;2、Cookie应用&lt;/h1&gt;
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;如何使用cookie检测初访者&quot;&gt;如何使用cookie检测初访者&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;调用HttpServletRequest.getCookies()获取Cookie数组&lt;/li&gt;
+  &lt;li&gt;在循环中检索指定名字的cookie是否存在以及对应的值是否正确&lt;/li&gt;
+  &lt;li&gt;如果是则退出循环并设置区别标识&lt;/li&gt;
+  &lt;li&gt;根据区别标识判断用户是否为初访者从而进行不同的操作&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;使用cookie检测初访者的常见错误&quot;&gt;使用cookie检测初访者的常见错误&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;不能仅仅因为cookie数组中不存在在特定的数据项就认为用户是个初访者。如果cookie数组为null，客户可能是一个初访者，也可能是由于用户将cookie删除或禁用造成的结果。&lt;/li&gt;
+  &lt;li&gt;但是，如果数组非null,也不过是显示客户曾经到过你的网站或域，并不能说明他们曾经访问过你的servlet。其它servlet、JSP页面以及非Java Web应用都可以设置cookie，依据路径的设置，其中的任何cookie都有可能返回给用户的浏览器。&lt;/li&gt;
+  &lt;li&gt;正确的做法是判断cookie数组是否为空且是否存在指定的Cookie对象且值正确。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;使用cookie属性的注意问题&quot;&gt;使用cookie属性的注意问题&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;属性是从服务器发送到浏览器的报头的一部分；但它们不属于由浏览器返回给服务器的报头。　&lt;/li&gt;
+  &lt;li&gt;因此除了名称和值之外，cookie属性只适用于从服务器输出到客户端的cookie；服务器端来自于浏览器的cookie并没有设置这些属性。　&lt;/li&gt;
+  &lt;li&gt;因而不要期望通过request.getCookies得到的cookie中可以使用这个属性。这意味着，你不能仅仅通过设置cookie的最大时效，发出它，在随后的输入数组中查找适当的cookie,读取它的值，修改它并将它存回Cookie，从而实现不断改变的cookie值。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;如何使用cookie记录各个用户的访问计数&quot;&gt;如何使用cookie记录各个用户的访问计数&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;获取cookie数组中专门用于统计用户访问次数的cookie的值&lt;/li&gt;
+  &lt;li&gt;将值转换成int型&lt;/li&gt;
+  &lt;li&gt;将值加1并用原来的名称重新创建一个Cookie对象&lt;/li&gt;
+  &lt;li&gt;重新设置最大时效&lt;/li&gt;
+  &lt;li&gt;将新的cookie输出&lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+				<pubDate>Wed, 24 Feb 2016 22:44:00 +0800</pubDate>
+				<link>/blog/Distribute-session.html</link>
+				<guid isPermaLink="true">/blog/Distribute-session.html</guid>
+			</item>
+		
+			<item>
+				<title>NIO Buffer</title>
+				<description>&lt;h2 id=&quot;内部元素&quot;&gt;内部元素&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;内容： 包含基本类型，线性、有限特定基本类型序列。&lt;/li&gt;
+  &lt;li&gt;容量（capacity) : Buffer对象最大能写入的大小、不变量。&lt;/li&gt;
+  &lt;li&gt;最大读取位置(limit) : Buffer对象当前写入的最大位置，读取时候最大的读取位置。&lt;/li&gt;
+  &lt;li&gt;当前位置(position) : 当前索引，下一个要写入和读取的位置。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;A buffer’s capacity is the number of elements it contains. The capacity of a buffer is never negative and never changes.&lt;/li&gt;
+  &lt;li&gt;A buffer’s limit is the index of the first element that should not be read or written. A buffer’s limit is never negative and is never greater than its capacity.&lt;/li&gt;
+  &lt;li&gt;A buffer’s position is the index of the next element to be read or written. A buffer’s position is never negative and is never greater than its limit.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;几个概念的关系&quot;&gt;几个概念的关系：&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;0 &amp;lt;= mark &amp;lt;= position &amp;lt;= limit &amp;lt;= capacity&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;易混淆方法&quot;&gt;易混淆方法&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;clear: 设置limit为capacity,position为零。&lt;/li&gt;
+  &lt;li&gt;flipping: 设置limit为当前位置,position为零。&lt;/li&gt;
+  &lt;li&gt;rewinding: limit未设置,position为零。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;clear makes a buffer ready for a new sequence of channel-read or relative put operations: It sets the limit to the capacity and the position to zero.&lt;/li&gt;
+  &lt;li&gt;flip makes a buffer ready for a new sequence of channel-write or relative get operations: It sets the limit to the current position and then sets the position to zero.&lt;/li&gt;
+  &lt;li&gt;rewind makes a buffer ready for re-reading the data that it already contains: It leaves the limit unchanged and sets the position to zero.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;实现&quot;&gt;实现&lt;/h2&gt;
+&lt;p&gt;Buffer 抽象类，由Builder模式设计与实现。&lt;/p&gt;
+
+</description>
+				<pubDate>Wed, 24 Feb 2016 22:44:00 +0800</pubDate>
+				<link>/blog/nio-buffer.html</link>
+				<guid isPermaLink="true">/blog/nio-buffer.html</guid>
+			</item>
+		
+			<item>
+				<title>线程总结</title>
+				<description>&lt;h1 id=&quot;线程同步&quot;&gt;线程同步：&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;不变形&lt;/li&gt;
+  &lt;li&gt;枷锁&lt;/li&gt;
+  &lt;li&gt;线程封闭&lt;/li&gt;
+  &lt;li&gt;栈封闭&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;deque-blockdeque&quot;&gt;Deque BlockDeque&lt;/h2&gt;
+
+&lt;h3 id=&quot;线程窃取&quot;&gt;线程窃取&lt;/h3&gt;
+&lt;h1 id=&quot;线程状态&quot;&gt;线程状态：&lt;/h1&gt;
+&lt;ol&gt;
+  &lt;li&gt;新建&lt;/li&gt;
+  &lt;li&gt;就绪&lt;/li&gt;
+  &lt;li&gt;阻塞&lt;/li&gt;
+  &lt;li&gt;运行&lt;/li&gt;
+  &lt;li&gt;死亡&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;concurrenthashmapstringfuture&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ConcurrentHashMap&amp;lt;String,Future&amp;lt;?&amp;gt;&amp;gt;&lt;/code&gt;&lt;/h1&gt;
+
+&lt;h1 id=&quot;可变状态是至关重要的&quot;&gt;可变状态是至关重要的&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;可变状态越少，越容易保证线程安全&lt;/li&gt;
+  &lt;li&gt;尽量将域声明为final&lt;/li&gt;
+  &lt;li&gt;不可变对象一定是线程安全的&lt;/li&gt;
+  &lt;li&gt;封装有助于管理复杂性&lt;/li&gt;
+  &lt;li&gt;锁控制可变变量&lt;/li&gt;
+  &lt;li&gt;保证同一个不变性条件的所有变量时，需要使用锁&lt;/li&gt;
+  &lt;li&gt;进行复合操作需要锁&lt;/li&gt;
+  &lt;li&gt;禁止随意推断不需要加锁&lt;/li&gt;
+  &lt;li&gt;同步策略文档化&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;同步工具类&quot;&gt;同步工具类&lt;/h1&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;栅栏Barrier CycleBarrier Exchange&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;闭锁用于等待事件，而栅栏用于等待线程。&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;信号量Semaphore&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;控制同时访问特定资源的数量。二值信号量互斥。&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;闭锁CountDownLatch  FutureTask&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;延迟到线程的进度到达终止状态，&lt;/p&gt;
+
+&lt;h1 id=&quot;executorservice&quot;&gt;ExecutorService&lt;/h1&gt;
+&lt;p&gt;CompletionService  Executor BlockQueue&lt;/p&gt;
+
+&lt;h1 id=&quot;线程池&quot;&gt;线程池&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;newFixedThreadPool&lt;/li&gt;
+  &lt;li&gt;newCachedThreadPool&lt;/li&gt;
+  &lt;li&gt;newSchedueledThreadPool&lt;/li&gt;
+  &lt;li&gt;newSingleThreadPool&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;em&gt;shutdown 平缓关闭，等待正在执行的完成，取消将要执行的线程&lt;/em&gt;
+&lt;em&gt;shutdownNow 取消所有正在运行的任务，不启动在队列中的任务&lt;/em&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;DelayQueue
+  管理一组Delayed对象，每个对象都有一个延迟时间，只有某个元素逾期后才执行take操作，按照延迟时间排序。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;ReentrantLock
+  定时
+  重入
+  可中断&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;ReadWriteLock&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;ReentrantReadWriteLock&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Condition内置条件队列&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;AQS&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;boolean acquire() throws InterruptedException {
+	while(当前状态不允许操作) {
+		if(需要阻塞获取请求) {
+			如果当前线程不在队列中，则将其插入队列
+			阻塞当前线程
+		}
+		eles
+			返回失败
+	}
+	可能更新同步器状态
+	如果线程位于队列中，将其移除队列
+	返回成功
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;void release() {
+	更新同步器状态
+	if(新的状态允许某个被阻塞的线程获取成功) {
+		解除队列中一个或者多个阻塞状态
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;原子类&quot;&gt;原子类&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;AtomicInteger&lt;/li&gt;
+  &lt;li&gt;AtomicReference&lt;V&gt;&lt;/V&gt;&lt;/li&gt;
+  &lt;li&gt;AtomicReferenceFieldUpdate&amp;lt;Node,Node&amp;gt;&lt;/li&gt;
+  &lt;li&gt;AtomicStampReference&lt;V&gt;&lt;/V&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;内存模型&quot;&gt;内存模型&lt;/h1&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;重排列&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Happens-Before规则：
+ 程序顺序规则
+ 监视器规则
+ voliate变量规则
+ 线程启动规则
+ 中断规则
+ 终结器规则
+ 传递性&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;当缺少Happens-Before规则时候，就可能出现重排列&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;improve&quot;&gt;Improve&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;queue arrayList -&amp;gt; LinkedList&amp;lt;&amp;gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+</description>
+				<pubDate>Wed, 24 Feb 2016 22:44:00 +0800</pubDate>
+				<link>/blog/Java-Concurrent-Best-Practise.html</link>
+				<guid isPermaLink="true">/blog/Java-Concurrent-Best-Practise.html</guid>
+			</item>
+		
+			<item>
+				<title>JVM架构</title>
+				<description>&lt;h1 id=&quot;jvm内存分配与使用受限于物理内存以及操作系统&quot;&gt;JVM内存分配与使用受限于物理内存以及操作系统&lt;/h1&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-XX:UserCompressedOops&lt;/code&gt; 压缩指针
+&lt;code class=&quot;highlighter-rouge&quot;&gt;-XX:+AggressiveOpts&lt;/code&gt; 添加设置额外的性能优化&lt;/p&gt;
+
+&lt;h1 id=&quot;vm生命周期&quot;&gt;VM生命周期：&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;启动器&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;java ,javaw (windows platform),JNI_CreateJavaJVM,javaws (java web start)&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;解析命令行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;-client/-server ,决定加载加载哪个JIT
+	设置堆大小和JIT编译器
+	若没有明确设置堆大小和JIT编译器，启动器会通过自动优化进行设置。
+	设置环境变量（LD_LIBARY_PATH,CLASSPATH)
+	若存在-jar ,启动器会从指定的JAR的manifest中查找Main-Class,否则从命令行读取
+	使用标准的Java本地接口(JNI)创建	HotSpot VM。
+	一旦创建并初始化HotSpot VM,就会加载Java Main-Class,启动器也会从中得到main方法参数。
+	通过JNI调用CallStaticVoidMethod调用Java main方法，将命令行传递。
+&lt;/p&gt;
+
+&lt;h1 id=&quot;类加载&quot;&gt;类加载&lt;/h1&gt;
+&lt;p&gt;对于给定的Java类或者接口，类加载会根据全称加载二进制类文件，定义Java类，然后创建类或接口的Java.lang.Class对象。若未能找到，则跑出NoClassDefFound。此外，类加载会对类的格式进行检查，若出错，则抛出ClassFormatError或UnSupportedClassVersionError。
+Java类加载器前，必须先加载所有超类和接口。
+若类的继承关系出错，抛出ClassCircularityError。若超类是接口或者接口是类，抛出InCompatibleClassChangeError
+&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;链接&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;检查文件的语义，常量池符号和类型，若出错抛出VerifyError.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;准备&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;创建静态字段，初始化为默认值，分配方法表&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;解析&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;可选，&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;初始化&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;运行类构造器（需要先初始化超类，接口不需要）&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;基于性能考量，直到初始化阶段，才会加载和链接类&lt;/em&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;类加载委托&quot;&gt;类加载委托&lt;/h1&gt;
+&lt;p&gt;请求类加载器查找个加载某个类时，可以转而请求别的加载器来加载，称为加载委托。	
+	类的首个加载器为初始加载器，最终定义类的加载器为自定义类加载器。
+	类加载器之间是层次化关系，每个类加载器都一个委托其上一级的类加载器。
+	J2SE的加载顺序为：启动类加载器、扩展类加载器、系统加载器。其中系统类加载器是默认加载器，加载Main方法并从classpath加载类。
+	应用加载器是可以是自带加载器，也可以进行扩展。
+	启动类加载器由HotSpot VM实现，负责加载BOOTCLASSPATH中的类。
+	为加快启动顺序，Client模式可以通过类数据共享使用已经加载的类（-Xshare:on,仅Serial支持）
+&lt;/p&gt;
+
+&lt;h1 id=&quot;类型安全&quot;&gt;类型安全&lt;/h1&gt;
+&lt;p&gt;Java类由类加载器和全限量名称类共同决定。&lt;/p&gt;
+
+&lt;h1 id=&quot;元数据&quot;&gt;元数据&lt;/h1&gt;
+&lt;p&gt;类加载时，会在永久代创建instanceKlass(arrayKlass)。instanceKClass引用java.lang.Class,后者是前者的镜像，VM内部使用klassOop(普通对象指针)访问instanceKlass&lt;/p&gt;
+
+&lt;h1 id=&quot;内部类加载数据&quot;&gt;内部类加载数据&lt;/h1&gt;
+&lt;p&gt;加载过程，VM维护三个散列表，建立类名/类加载器（初始加载器和自定义加载器）/klassOop对象映射。PlaceHolderTable包含当前正在加载的类，用于检查ClassCircularityError。LoaderConstraintTable用于追踪类型安全检查的约束&lt;/p&gt;
+
+&lt;h1 id=&quot;字节码验证&quot;&gt;字节码验证&lt;/h1&gt;
+&lt;p&gt;静态验证和动态验证。
+	有些参数个数和参数类型在运行时候动态分析代码，方法如下：
+		方法推导：
+			对每个字节码进行抽象解释并在目标分支上进行类型合并。若未发现隐形类型或者适配，抛出VerfiyError。
+		类型检查：
+			编译器将目标分支或异常分支设置在code属性的StackMapTable中。StackMapTable包含多个栈映射帧，每个映射都会用字节码偏移量表示栈和局部变量的类型。
+&lt;/p&gt;
+
+&lt;h1 id=&quot;数据共享&quot;&gt;数据共享&lt;/h1&gt;
+&lt;p&gt;使用JRE时，安装程序会加载Jar中部分类，变成私有的内部表示并转储文件，称为共享文档。若没有该文件，也可以手动生成，之后调用VM，共享文档会映射到内存，减少加载数量。
+	VM在共享代引入新的子空间，用以包含共享数据，VM启动时，共享文档classes.jsa作为内存映射加载到永久代，随后VM内存管理系统管理该区域。
+&lt;/p&gt;
+
+&lt;h1 id=&quot;解释器&quot;&gt;解释器&lt;/h1&gt;
+&lt;p&gt;基于模板解释器，内部使用TemplateTable在内存中生成解释器，包含每个字节对应的机器代码，每个模板对应一个字节码。该方式由于switch.
+VM解释器自适应优化的一部分，直接用解释器运行程序，并检测热点，使用全局机器代码优化。
+&lt;/p&gt;
+
+&lt;h1 id=&quot;异常处理&quot;&gt;异常处理&lt;/h1&gt;
+&lt;p&gt;遇到与Java语义约束冲突，会触发异常处理程序。由VM解释器、JIT解释器和VM协同完成。处理方式：
+	本方法处理
+		同一方法抛出、捕获异常
+	方法外处理
+		退栈后调用异常处理程序
+	VM处理
+		VM查找异常处理程序
+&lt;/p&gt;
+
+&lt;h1 id=&quot;同步&quot;&gt;同步&lt;/h1&gt;
+&lt;p&gt;并发操作机制，用于预防、避免对资源的不当的交替使用（竞争），保证交替使用资源安全。Java使用线程实现并发。互斥是特殊的同步机制（同一时间仅最多有一个线程访问资源）。
+	VM使用monitor保证运行代码的互斥，可以解锁或加锁，任意时刻仅有一个线程获得monitor所有权（由synchronized block）。
+	线程去试图锁定拥有被线程占用的monitor时，等待直到所有者是否锁，才能获得。
+	大多数对象在生命周期最多只有一个线程，可以开启-XX:UseBiasedLocking允许线程自身使用偏向锁，开启后就不需要昂贵的原子操作来维护。
+	VM中由C1（-client JIT编译器）、C2 (-server JIT编译器)和解释器。在没有竞争情况下直接生产fast-path；需要阻塞和解锁(monitor-enter,monitor-exit),fast-path调用slow-path(c++实现)。
+	
+	VM内部表示的Java对象第一个字(word)包含同步状态编码：
+		中立：已经解锁
+		偏向：已经锁定/已经解锁且无共享
+		栈锁：已锁定且共享（共享意思是该标记指向锁对象在线程中标记子副本）
+		膨胀：已经锁定/已经解锁且共享和竞争。线程在moniter-enter(wait)阻塞，指向重的Object-monitor对象。
+&lt;/p&gt;
+
+&lt;h1 id=&quot;线程对象&quot;&gt;线程对象&lt;/h1&gt;
+&lt;h2 id=&quot;线程管理&quot;&gt;线程管理：&lt;/h2&gt;
+
+&lt;p&gt;从创建到终止的整个生命周期、HotSpot VM线程间协调。线程管理实现细节和平台相关。包括：
+	Java代码创建的线程
+	直接与HotSpot VM关联的线程
+	HotSpot其他目的建立的线程
+&lt;/p&gt;
+
+&lt;h2 id=&quot;线程模型&quot;&gt;线程模型：&lt;/h2&gt;
+&lt;p&gt;Java程序启动时候会创建一个本地操作的系统线程，当终止时，操作系统线程也会被回收。不同平台实现中的线程优先级与Java的映射不尽相同。&lt;/p&gt;
+
+&lt;h2 id=&quot;线程创建&quot;&gt;线程创建：&lt;/h2&gt;
+&lt;h3 id=&quot;vm引入线程方式&quot;&gt;VM引入线程方式：&lt;/h3&gt;
+&lt;p&gt;java.lang.Thread对象的start()
+JNI将已经存在的本地线程关联到VM上。&lt;/p&gt;
+
+&lt;h3 id=&quot;线程表示&quot;&gt;线程表示：&lt;/h3&gt;
+&lt;p&gt;java.lang.Thread实例以Java代码表示
+	VM内部以C++ JavaThread实例表示java.lang.Thread实例，其中包含其他线程的追踪状态。JavaThread内部指针指向Thread对象，也保存了OSThread的引用；Thread对象包含JavaThread的原始整数(Raw Int)。
+	OSThread表示操作系统线程。
+&lt;/p&gt;
+
+&lt;h3 id=&quot;线程启动过程&quot;&gt;线程启动过程：&lt;/h3&gt;
+&lt;p&gt;-》java.lang.Thread启动
+	-》VM使用attachCurrentThread关联本地线程，创建关联的JavaThread和OSThread，本地线程，
+	-》VM分配资源（本地存储和缓存、同步对象等）
+	-》本地线程初始化
+	-》Thead.run()
+	-》线程返回，处理未被捕获的异常
+	-》终止线程，检测是否终止VM
+	-》终止线程会是否分配的资源，移除JavaThread
+	-》调用OSThread和Java的析构函数
+	-》终止
+&lt;/p&gt;
+
+&lt;h3 id=&quot;线程状态&quot;&gt;线程状态：&lt;/h3&gt;
+&lt;p&gt;	新线程：线程在初始化过程中
+	线程在Java中：在执行Java代码
+	线程在VM中：在VM中执行
+	线程阻塞：由于（获取锁、阻塞IO等待条件等）被阻塞
+	Monitor_wait:等待获取竞争的监视锁
+	Condition_wait:等待VM的内部条件变量
+	Object_wait:Java线程在执行Object.wait()&lt;/p&gt;
+
+&lt;h3 id=&quot;vm内部线程&quot;&gt;VM内部线程：&lt;/h3&gt;
+&lt;p&gt;	VM线程：C++单例对象，负责VM操作
+	周期任务操作：C++单例对象（WatchedThread）,模拟计时器中断在VM中可以周期操作
+	垃圾回收线程：
+	JIT编译器线程：运行时编译，编译为字节码
+	信号分发线程：&lt;/p&gt;
+
+&lt;h3 id=&quot;vm操作和安全点&quot;&gt;VM操作和安全点：&lt;/h3&gt;
+&lt;p&gt;	VM内部VMThread监控VMOperationQueue的C++对象，等待对象出现VM操作，操作等到安全点才执行，所有的线程都阻塞。
+	垃圾回收是最出名的VM安全点操作（Stop-world阶段）、偏向锁撤销、线程栈转储、线程的挂起和停止以及JVMTI请求检查和更改操作。
+	VM通过协作、轮询创建安全点。
+	在安全点，VMThread用Threads_locks阻塞所有正在运行的线程，VM操作完成后，释放Threads_lock。&lt;/p&gt;
+
+&lt;h2 id=&quot;c堆管理&quot;&gt;C++堆管理&lt;/h2&gt;
+&lt;p&gt;VM使用C++堆存储VM内部结构和数据。Arena的一些子类负责管理VM C++堆操作，只提供给VM 使用，不会暴露给VM使用者。
+	Arena子类家里的malloc/free之上的一层，包含3个全局的ChunkPool，安装请求分配的大小由不同的部分高效操作。
+	Arena是一些缓存了一定数量内存空间的ThreadLocal对象。由于不需要共享全局锁，这就使得快速路径的分配成为可能。
+	Arena还用于ThreadLocal的资源和句柄管理。client和server模式的JIT compilers都使用Arena。&amp;lt;&lt;p&gt;p&amp;gt;
+			
+
+## Java本地接口
+&lt;p&gt;运行VM可以使用Java语言和其他语言进行协作。
+	JNI可以用来创建、检测和更新Java对象，调用Java对象、捕获并抛出异常、加载类并获取类信息以及执行运行时类型检查。
+	JNI和Invocation API，任意本地应用都可以嵌入Java VM。
+	但是，丧失平台独立性；Java时强语言类型，C/C++不是，调用前会进行安全检查。
+	VM命令行选项（-Xcheck：jni）可以辅助调试JNI本地方法。
+	VM追踪执行本地方法的线程必须小心。VM线程执行本地代码到达安全点时，继续执行本地代码，直到返回Java代码或JNI调用结束。&lt;/p&gt;
+	
+	
+## VM致命错误处理：
+&lt;p&gt;VM为开发者提供足够信息在诊断和修复VM致命错误。会产生hs_err_pid&lt;pid&gt;.log,包括内存镜像，执行输出位置-XX：ErrorFile;OOE也可以触发生成文件。
+	JKD1.6后，-XX:OnOutOfMemeoryError=&lt;cmd&gt; 抛出OOE时，执行&lt;cmd&gt;。
+	-XX：HeapDumpOnOutOfMemory -XX：HeapDump-Path=&lt;path&gt; 指定转储的文件路径&amp;lt;/p&amp;gt;
+	
+	
+# 垃圾收集器
+* Serial收集器
+* Parallel收集器
+* CMS
+* G1
+
+# JIT
+&lt;/path&gt;&lt;/cmd&gt;&lt;/cmd&gt;&lt;/pid&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;
+</description>
+				<pubDate>Wed, 24 Feb 2016 22:44:00 +0800</pubDate>
+				<link>/blog/Performance-JVM.html</link>
+				<guid isPermaLink="true">/blog/Performance-JVM.html</guid>
+			</item>
+		
+			<item>
+				<title>性能调优-操作系统篇</title>
+				<description>&lt;h1 id=&quot;性能监控&quot;&gt;性能监控&lt;/h1&gt;
+&lt;p&gt;&lt;small&gt;以一种非入侵的方式收集或者查看应用性能数据的活动。监控通常是一种在生产、质量评估或者开发环境中实施的带有预防性或者主动性的活动。&lt;/small&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;cpu使用率&quot;&gt;CPU使用率&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;用户态和系统态。用户态CPU使用率：执行应用程序代码的时间占总CPU时间的百分比。系统CPU使用率：执行系统调用的时间占总CPU时间百分比。&lt;/li&gt;
+  &lt;li&gt;系统态高意味着共享资源竞争或者IO设备有大量交互。目标是：提高应用的性能可扩展性，尽量减少系统CPU使用率。&lt;/li&gt;
+  &lt;li&gt;对于密集型应用，还要监控每分钟指令数（Instruction Per Clock）或每指令时钟周期（Cycle Per Instruction）等指标。&lt;/li&gt;
+  &lt;li&gt;现代操作系统自带的CPU使用率监控工具只能报告CPU使用率，没有CPU指令占用CPU时钟周期百分比。当CPU在等在内存中数据，仍会报告CPU繁忙。&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;当CPU执行指令所用的操作数不在寄存器或者缓存中时候，必须等待数据从内存装入CPU寄存器，导致CPU时间浪费。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;图形监控工具：&lt;code class=&quot;highlighter-rouge&quot;&gt;gnome-system-monitor&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;命令行：
+    &lt;pre&gt;&lt;code class=&quot;language-Shell&quot;&gt;  vmstat(us:用户态CPU使用率，sy:系统态CPU使用率，id：空闲率或者CPU可用率。us+sy+id=100),
+  mpstat(usr,sys,wt:IO等待时间,idl)
+  top
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;cpu调度程序运行队列&quot;&gt;CPU调度程序运行队列&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;运行队列包含已经准备好运行，正在等待可用CPU的轻量级进程。若数量超过系统负荷，运行队列会很长。&lt;/li&gt;
+  &lt;li&gt;虚拟处理器的个数是系统硬件线程个数：Runtime.availableProcessors()。当运行长度队列超过虚拟处理4倍或者更多时，系统响应会很缓慢。&lt;/li&gt;
+  &lt;li&gt;一般性原则：运行队列长度超过虚拟处理个数1倍需要关注，但不需要立即处理。若长时间高于3-4倍，需要及时处理。&lt;/li&gt;
+  &lt;li&gt;解决办法：增加CPU分担负荷；减少处理数量。一种：从根本上减少虚拟处理器的处理数，减少运行队列中的轻量级线程；另一种：分析系统应用，改进CPU使用率。
+    &lt;h2 id=&quot;内存使用率&quot;&gt;内存使用率&lt;/h2&gt;
+  &lt;/li&gt;
+  &lt;li&gt;除此之外，页面调度（页交换）、加锁、线程迁移中的让步和抢占式上下文切换。&lt;/li&gt;
+  &lt;li&gt;系统在进行页面交换或者使用虚拟内存时，Java应用或者JVM表现出明显的性能问题。当应用需要内存超过物理内存就会发送页面交换，为了缓解这个问题，需要配置swap空间（在独立的磁盘分区，应用耗尽物理内存时候，系统会将部分内存放置到swap空间（通常是最少运行部分）；当被访问的部分不在内存中时，则需要从swap空间移入内存）。对于系统的响应和吞吐有较大的影响。&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;JVM垃圾回收再页面交换时，性能会很差（扫描可达对象，需要大量内存，若一部分被置换出去，则需要再移入，因此会增加垃圾回收时间，导致JVM长期停滞）。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;vmstat(free:可用空闲内存，si:页面移入数量,so:页面移出数量)&lt;/li&gt;
+  &lt;li&gt;锁竞争：
+    &lt;ul&gt;
+      &lt;li&gt;JDK1.5之前，通过CPU使用率和smtx（互斥量的自旋次数），可以监控应用中的锁竞争。&lt;/li&gt;
+      &lt;li&gt;JDK1.5以后，HotSpot VM通过线程循环自旋尝试获得锁，若若干次忙循环后仍然没有成功，则挂起该线程，等待被唤醒再尝试获得该锁。挂起和唤醒会导致操作系统让步式切换（代价为80 000个时钟周期）。该指标可以用来衡量锁竞争。&lt;/li&gt;
+      &lt;li&gt;mpstat(csw:上下文切换总和，icsw:抢占式上下文切换)&lt;/li&gt;
+      &lt;li&gt;一般原则：让步式上下文切换（csw-icsw）超过5%，表明出现锁竞争。&lt;/li&gt;
+      &lt;li&gt;命令行：sysstat包中pidstat -w (csw/s:让步式上下文切换) ： 报告的是每秒所有虚拟处理器让步式上下文切换数&lt;/li&gt;
+      &lt;li&gt;让步式上下文切换浪费时钟周期 = (pidstat -w 让步式上下文切换数)/(虚拟处理器个数)&lt;/li&gt;
+      &lt;li&gt;sample : pidstat -w -I -p 9391 5 每5秒监控进程号9391应用。&lt;/li&gt;
+      &lt;li&gt;计算方式： 处理器为3.0GHz双核，每秒3500上下文切换，每个虚拟处理器上下文切换 3500/2 = 1750,耗费时钟周期 1750 * 80 000 = 140 000 000,3GHz每秒时钟周期3000 000 000,则浪费的时钟周期 4.7% = 140 000 000/ 3000 000 000（超过3%,面临竞争）&lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;工具推荐： Oracle Solaris Studio Performance Analyzer 最适合分析隔离和报告锁竞争&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;抢占式上下文切换：
+        &lt;ol&gt;
+          &lt;li&gt;让步式上下文切换线程主动释放CPU，抢占式上下文切换则因分配的时间片用尽被迫放弃CPU或者其他优先级更高的线程所抢占。mpstat(icsw)&lt;/li&gt;
+          &lt;li&gt;taskset 创建处理器组并将应用分配给处理器组。&lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+      &lt;li&gt;线程迁移：
+        &lt;ol&gt;
+          &lt;li&gt;大多数操作系统CPU调度会将待运行的线程分配给上次运行的处理器，若出现处理器繁忙，调度程序会其迁移到其他的处理器运行。新的处理器没有缓存线程需要的数据以及状态，会带来性能问题。mpstat(migr)&lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;网络io使用率&quot;&gt;网络IO使用率&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;分布式的Java应用的扩张和扩张收到网络带宽或者网络IO限制。当超过网络接口硬件的处理能力，将被放入系统缓冲区，导致应用延迟。
+命令行：netstat；sysstat可选包，但是不提供网络使用率；nicstat(solaris移植)
+    &lt;pre&gt;&lt;code class=&quot;language-Shell&quot;&gt;  nicstat [-hnsz] [-i interface[,...]] | [interval [count]]
+      -h 帮助信息
+      -n 非本地接口
+      -s 概要信息
+      -z 跳过0值
+      -i interface 网络接口名称
+      interval 报告输出的频率（秒）
+      count(采样数)
+      (Int:网络接口设备名；rkb/s:每秒读入的KB数；wb/s:每秒写入的KB数；rPk/s:每秒读取KB数；
+          wPk/s:每秒写入的包数；rAvs:每次读取的字节数；wAvs:每次写入的的平均字节数；
+          %Util:接口使用率；Sat:饱和度)
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;可以提供每秒发送/接收包数量（错误+ 冲突），少量冲突在以太网是正常的；大量的冲突由于网络接口卡出错、糟糕的线路或者自动协商机制。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;每次读写数据量小而网络读写量大的应用会导致消耗大量的系统态CPU,产生大量系统调用。策略：减少网络读写的系统调用；使用非阻塞IO；减少处理请求和响应的线程数。误用原生的JDK NIO导致性能变差，建议使用NIO框架。
+    &lt;h2 id=&quot;磁盘使用率&quot;&gt;磁盘使用率&lt;/h2&gt;
+  &lt;/li&gt;
+  &lt;li&gt;对于磁盘应用，查找性能问题，需要监控磁盘IO。
+命令行：&lt;code class=&quot;highlighter-rouge&quot;&gt;iostat&lt;/code&gt;
+    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;      sample : 
+          iostat &lt;span class=&quot;nt&quot;&gt;-xc&lt;/span&gt; 5&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;磁盘使用率和CPU使用率&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+          iostat &lt;span class=&quot;nt&quot;&gt;-xm&lt;/span&gt; 5&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;磁盘使用率和系统态CPU使用率&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;为了判读读写哪个文件，使用Solaris 10和Solaris 11 Express在/usr/demo/dtrace目录下有一些DTrace脚步有助于监控磁盘活动，iosnoop.d提供详细信息（哪个用户，哪个进程，读写字节数，读写的问题件名称）
+    &lt;ul&gt;
+      &lt;li&gt;uid 执行磁盘操作用户ID&lt;/li&gt;
+      &lt;li&gt;pid 进程ID&lt;/li&gt;
+      &lt;li&gt;D R（读）或者W（写）&lt;/li&gt;
+      &lt;li&gt;BLOCK 磁盘块&lt;/li&gt;
+      &lt;li&gt;SIZE 数据读写字节数&lt;/li&gt;
+      &lt;li&gt;COMM 执行磁盘访问的名称&lt;/li&gt;
+      &lt;li&gt;PATHNAME 访问的文件名称&lt;/li&gt;
+      &lt;li&gt;优化策略：
+        &lt;ul&gt;
+          &lt;li&gt;更快的存储设备&lt;/li&gt;
+          &lt;li&gt;文件扩张到多个磁盘&lt;/li&gt;
+          &lt;li&gt;
+            &lt;p&gt;操作系统调优可以缓存大量的文件系统数据结构&lt;/p&gt;
+          &lt;/li&gt;
+          &lt;li&gt;从应用的角度，减少磁盘的活动：使用带缓冲的输入输出流；减少读写次数；集中缓冲数据结构减少磁盘交互。缓冲区减少调用操作系统的调用次数从而降低CPU使用率&lt;/li&gt;
+          &lt;li&gt;关于磁盘性能，检查磁盘缓冲是否开启。开启会改善严重依赖磁盘IO的应用性能，但是意外的电源故障会导致数据损坏&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+				<pubDate>Wed, 24 Feb 2016 22:44:00 +0800</pubDate>
+				<link>/blog/performance-os.html</link>
+				<guid isPermaLink="true">/blog/performance-os.html</guid>
+			</item>
+		
+			<item>
+				<title>JVM内存布局</title>
+				<description>&lt;h1 id=&quot;1程序计数器&quot;&gt;1、程序计数器&lt;/h1&gt;
+
+&lt;p&gt;当前线程所执行字节码指示器。
+字节码解释是通过改变这个计数器的值来选择下一条所需要执行的字节码指令，分支、循环、跳转、异常处理、线程恢复。&lt;/p&gt;
+
+&lt;p&gt;每个线程有独立的程序计数器。&lt;/p&gt;
+
+&lt;h1 id=&quot;2java虚拟栈&quot;&gt;2、Java虚拟栈&lt;/h1&gt;
+
+&lt;p&gt;线程私有，每个方法在执行同时会创建一个栈帧，用于存储局部变量、操作数栈、动态链接、方法出口灯信息。
+每个方法的执行伴随着从入栈到出栈过程。&lt;/p&gt;
+
+&lt;p&gt;局部变量表存放基础类型： boolean char int long short double float 对象引用
+其中long doube 占64位，会占用两个局部空间&lt;/p&gt;
+
+&lt;p&gt;线程请求栈深度超过虚拟机运行的深度，抛出StackOverflowError.
+虚拟机栈如果可以动态扩展，若无法申请到足够内存，抛出OutOfMemoryError.&lt;/p&gt;
+
+&lt;h1 id=&quot;3本地方法栈&quot;&gt;3、本地方法栈&lt;/h1&gt;
+
+&lt;p&gt;虚拟机使用的Native的服务，
+也会抛出StackOverflowError和OutOfMemoryError.&lt;/p&gt;
+
+&lt;h1 id=&quot;4java堆&quot;&gt;4、Java堆&lt;/h1&gt;
+
+&lt;p&gt;线程共享的区域。
+几乎所有的对象实例和数组所需空间在此分配，但是JIT编译器的成熟，栈上分配、标量替换优化技术。&lt;/p&gt;
+
+&lt;p&gt;是垃圾回收的主要区域。
+新生代&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Edgn空间&lt;/li&gt;
+  &lt;li&gt;From Survior&lt;/li&gt;
+  &lt;li&gt;To Survior
+老年代&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;线程共享的Java堆中可能划分出多个线程私有的分配缓冲区（Thread Local Allocation Buffer）。与存放内容无关，仍然存储对象实例，便于垃圾回收或更快的分配内存。&lt;/p&gt;
+
+&lt;p&gt;逻辑上连续，物理上允许不连续。通过(-Xms -Xmx)控制。
+若堆中无法继续分配，则抛出OutOfMemoryError.&lt;/p&gt;
+
+&lt;h1 id=&quot;5方法区&quot;&gt;5、方法区&lt;/h1&gt;
+
+&lt;p&gt;线程共享区域，存放虚拟机加载的类信息、常量、静态变量、JIT编译后的代码，又称为非堆（永久代）。
+使用-XX:MaxPermSize配置上限&lt;/p&gt;
+
+&lt;h1 id=&quot;6运行时常量&quot;&gt;6、运行时常量&lt;/h1&gt;
+
+&lt;p&gt;方法区的一部分
+Class文件除了类的版本、字段、方法、接口信息，还有常量池，用于存放编译期间生成的字面量和符号引用。&lt;/p&gt;
+
+&lt;p&gt;运行期间也可以添加，例如String.intern()&lt;/p&gt;
+
+&lt;p&gt;当无法分配时，抛出OutOfMemoryError.&lt;/p&gt;
+
+&lt;h1 id=&quot;7直接内存&quot;&gt;7、直接内存&lt;/h1&gt;
+
+&lt;p&gt;不是虚拟机云信使内存的一部分，也不在Java虚拟机规范中。&lt;/p&gt;
+</description>
+				<pubDate>Wed, 24 Feb 2016 22:44:00 +0800</pubDate>
+				<link>/blog/JVM-memory.html</link>
+				<guid isPermaLink="true">/blog/JVM-memory.html</guid>
+			</item>
+		
+			<item>
+				<title>二叉树与常用算法</title>
+				<description>&lt;h1 id=&quot;1常用算法&quot;&gt;1、常用算法&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;插入排序（直接插入排序、希尔排序）&lt;/li&gt;
+  &lt;li&gt;交换排序（冒泡排序、快速排序）&lt;/li&gt;
+  &lt;li&gt;选择排序（直接选择排序、堆排序）&lt;/li&gt;
+  &lt;li&gt;归并排序&lt;/li&gt;
+  &lt;li&gt;分配排序（基数排序）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;所需辅助空间最多：归并排序 
+所需辅助空间最少：堆排序 
+平均速度最快：快速排序 
+不稳定：快速排序，希尔排序，堆排序。&lt;/p&gt;
+
+&lt;h2 id=&quot;a-直接插入排序&quot;&gt;a 直接插入排序&lt;/h2&gt;
+&lt;p&gt;基本思想：在要排序的一组数中，假设前面(n-1)[n&amp;gt;=2] 个数已经是排好顺序的，现在要把第n 个数插到前面的有序数中，使得这 n个数 也是排好顺序的。如此反复循环，直到全部排好顺序。 
+排序时间取决于输入元素的初始顺序，对于部分有序的排序使用时间较短。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;void insertSort(){  
+	int a[] = {45,4,62,99,98,54,56,17,18,23,34,15,35,25,53,51};   
+	for(int i = 0; i &amp;lt; a.length; i++ ) {
+		temp = a[i];
+		for(int j = i-1；j&amp;gt; 0 &amp;amp;&amp;amp; temp &amp;lt; a[j];j--) {
+			a[j+1] = a[j];
+		}
+		a[j+1] = temp;
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;b-希尔排序最小增量排序&quot;&gt;b 希尔排序（最小增量排序）&lt;/h2&gt;
+&lt;p&gt;基本思想：算法先将要排序的一组数按某个增量 d（n/2,n为要排序数的个数）分成若干组，每组中记录的下标相差d.
+对每组中全部元素进行直接插入排序，然后再用一个较小的增量（d/2）对它进行分组，在每组中再进行直接插入排序。当增量减到 1 时，进行直接插入排序后，排序完成。 
+中等大小的数组运行时间是可以接受的，代码量较少，并且不需要额外的空间。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;	shellSort(){   
+		int a[]={1,54,6,3,78,34,12,45,56,100};   
+		double d1=a.length;   
+		int temp=0;   
+		while(true){   
+			d1= Math.ceil(d1/2);   
+			int d=(int) d1;
+			for(int x=0;x&amp;lt; d;x++){
+				for(int i=x+d;i&amp;lt; a.length;i+=d){
+					int j=i-d;
+					temp=a[i];
+					for(;j&amp;gt;=0&amp;amp;&amp;amp;temp&amp;lt; a[j];j-=d){
+						a[j+d]=a[j];   
+	              	}
+	              	a[j+d]=temp;
+	            }
+	        }
+	        if(d==1){
+	        	break;
+	        }
+	    }
+	}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;c-简单选择排序&quot;&gt;c 简单选择排序&lt;/h2&gt;
+&lt;p&gt;基本思想：在要排序的一组数中，选出最小的一个数与第一个位置的数交换； 然后在剩下的数当中再找最小的与第二个位置的数交换，如此循环到倒数第二个数和最后一个数比较为止。 
+由有序数组或者数字相同或者随机的数组使用排序时间一样长：**缺点**
+数据交换最少：每次交换都会改变两个数组的值，使用N次交换。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;	selectSort(){
+		int a[]={1,54,6,3,78,34,12,45};
+		int position=0;
+		for(int i=0;i&amp;lt; a.length;i++){
+			int j=i+1;
+			position=i;
+			int temp=a[i];
+			for(;j&amp;lt; a.length;j++){
+				if(a[j]&amp;lt; temp){
+					temp=a[j];
+					position=j;
+				}
+			}
+			a[position]=a[i];a[i]=temp;
+		}
+	}   
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;d-堆排序&quot;&gt;d 堆排序&lt;/h2&gt;
+&lt;p&gt;基本思想：堆排序是一种树形选择排序，是对直接选择排序的有效改进。 堆的定义如下：具有n个元素的序列（h1,h2,...,hn),当且仅当满足（hi&amp;gt;=h2i,hi&amp;gt;=2i+1）或（hi&amp;lt;=h2i,hi&amp;lt;=2i+1）(i=1,2,...,n/2)时称之为堆。在这里只讨论满足前者条件的堆。由堆的定义可以看出，堆顶元素（即第一个元素）必为最大项（大顶堆）。完全二叉树可以很直观地表示堆的结构。堆顶为根，其它为左子树、右子树。初始时把要排序的数的序列看作是一棵顺序存储的二叉树，调整它们的存储序，使之成为一个堆，这时堆的根节点的数最大。然后将根节点与堆的最后一个节点交换。然后对前面(n-1)个数重新调整使之成为堆。依此类推，直到只有两个节点的堆，并对它们作交换，最后得到有 n个节点的有序序列。从算法描述来看，堆排序需要两个过程，一是建立堆，二是堆顶与堆的最后一个元素交换位置。所以堆排序有两个函数组成。一是建堆的渗透函数，二是反复调用渗透函数实现排序的函数。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;	void heapSort(int[] a){   
+		int arrayLength=a.length;   
+		for(int i=0;i&amp;lt; arrayLength-1;i++){   
+			buildMaxHeap(a,arrayLength-1-i);   
+			swap(a,0,arrayLength-1-i);   
+			System.out.println(Arrays.toString(a));   
+		}   
+	}   
+
+	private  void swap(int[] data, int i, int j) {   
+		int tmp=data[i];   
+		data[i]=data[j];   
+		data[j]=tmp;   
+	}   
+    
+    //对data 数组从0到lastIndex 建大顶堆   
+	private void buildMaxHeap(int[] data, int lastIndex) {   
+		//从lastIndex 处节点（最后一个节点）的父节点开始   
+		for(int i=(lastIndex-1)/2;i&amp;gt;=0;i--){   
+			//k 保存正在判断的节点   
+			int k=i;   
+			//如果当前k节点的子节点存在  
+			while(k*2+1&amp;lt;=lastIndex){   
+				//k 节点的左子节点的索引  
+				int biggerIndex=2*k+1;   
+				//如果biggerIndex 小于lastIndex，即biggerIndex+1 代表的k 节点的右子节点存在   
+				if(biggerIndex&amp;lt;lastIndex){  
+					//若果右子节点的值较大   
+					if(data[biggerIndex]&amp;lt;data[biggerIndex+1]){   
+						//biggerIndex 总是记录较大子节点的索引   
+						biggerIndex++;   
+					}   
+				 }   
+				//如果k节点的值小于其较大的子节点的值   
+				if(data[k]&amp;lt;data[biggerIndex]){   
+					//交换他们   
+					swap(data,k,biggerIndex);    
+					//将biggerIndex 赋予k，开始while 循环的下一次循环，重新保证k节点的值大于其左右子节点的值   
+					k=biggerIndex;   
+				 }else{   
+					break;   
+				 }   
+			}   
+		}   
+	}   
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;e-冒泡排序&quot;&gt;e 冒泡排序&lt;/h2&gt;
+&lt;p&gt;基本思想：在要排序的一组数中，对当前还未排好序的范围内的全部数，自上而下对相邻的两个数依次进行比较和调整，让较大的数往下沉，较小的往上冒。即：每当两相邻的数比较后发现它们的排序与排序要求相反时，就将它们互换。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;	bubbleSort(){  
+		int a[]={49,38,65,97,76,13,64,5,4,62,99,98,54,5,35,25,53,51};   
+		int temp=0;   
+		for(int i=0;i&amp;lt; a.length-1;i++){   
+			for(int j=0;j&amp;lt; a.length-1-i;j++){   
+				if(a[j]&amp;gt;a[j+1]){   
+					temp=a[j];   
+					a[j]=a[j+1];   
+					a[j+1]=temp;   
+				}   
+			}
+		}   
+	}   
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;f-快速排序&quot;&gt;f 快速排序&lt;/h2&gt;
+&lt;p&gt;基本思想：选择一个基准元素,通常选择第一个元素或者最后一个元素,通过一趟扫描，将待排序列分成两部分,一部分比基准元素小,一部分大于等于基准元素,此时基准元素在其排好序后的正确位置,然后再用同样的方法递归地排序划分的两部分。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;	quickSort {        
+		int a[]={49,38,65,4,62,99,98,54,56,17,18,23,34,15,35,25,53,51};   
+		public quickSort(){   
+			quick(a);   
+			for(int i=0;i&amp;lt; a.length;i++){   
+				System.out.println(a[i]);   
+			}   
+		}	 
+
+		public int getMiddle(int[] list, int low, int high) {     
+			int tmp =list[low];    //数组的第一个作为中轴     
+			while (low &amp;lt; high){     
+				while (low &amp;lt; high&amp;amp;&amp;amp; list[high] &amp;gt;= tmp) {     
+					high--;     
+				}     
+
+				list[low] =list[high];   //比中轴小的记录移到低端     
+				while (low &amp;lt; high&amp;amp;&amp;amp; list[low] &amp;lt;= tmp) {     
+					low++;     
+				}     
+
+				list[high] =list[low];   //比中轴大的记录移到高端     
+			}     
+			list[low] = tmp;              //中轴记录到尾     
+			return low;                   //返回中轴的位置     
+		}    
+
+		public void _quickSort(int[] list, int low, int high) {     
+			if (low &amp;lt; high){     
+				int middle =getMiddle(list, low, high);  //将list 数组进行一分为二     
+				_quickSort(list, low, middle - 1);       //对低字表进行递归排序     
+				_quickSort(list,middle + 1, high);       //对高字表进行递归排序     
+			}     
+		}   
+
+		public void quick(int[] a2) {     
+			if (a2.length &amp;gt; 0) {    //查看数组是否为空     
+				_quickSort(a2,0, a2.length - 1);     
+			}     
+		}
+	}    
+  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;g-归并排序&quot;&gt;g 归并排序&lt;/h2&gt;
+&lt;p&gt;基本排序：归并（Merge）排序法是将两个（或两个以上）有序表合并成一个新的有序表，即把待排序序列分为若干个子序列，每个子序列是有序的。然后再把有序子序列合并为整体有序序列。
+保证任意长度N的数组排序需要的时间和NlogN成正比。
+**缺点** 需要的额外空间和N成正比。
+sort()作用在于安排多次merge（）方法调用正确顺序。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;	mergingSort {   
+		int a[]={49,4,62,99,98,54,56,17,18,23,34,15,35,25,53,51};   
+	 
+		public mergingSort(){   
+			sort(a,0,a.length-1);   
+			for(int i=0;i&amp;lt;a.length;i++)   
+				System.out.println(a[i]);   
+		}   
+
+		public void sort(int[] data, int left, int right) {      
+			if(left&amp;lt;right){   
+				//找出中间索引   
+				int center=(left+right)/2;   
+				//对左边数组进行递归    
+				sort(data,left,center);   
+				//对右边数组进行递归   
+				sort(data,center+1,right);   
+				//合并   
+				merge(data,left,center,right);          
+			}   
+
+		}   
+
+		public void merge(int[] data, int left, int center, int right) {   
+			int[] tmpArr=newint[data.length];   
+			int mid=center+1;   
+			//third 记录中间数组的索引   
+			int third=left;   
+			int tmp=left;   
+			while(left&amp;lt;=center&amp;amp;&amp;amp;mid&amp;lt;=right){   
+				//从两个数组中取出最小的放入中间数组   
+				if(data[left]&amp;lt;=data[mid]){   
+					tmpArr[third++]=data[left++];   
+				}else{   
+					tmpArr[third++]=data[mid++];   
+				}   
+			}   
+
+			//剩余部分依次放入中间数组   
+			while(mid&amp;lt;=right){   
+				tmpArr[third++]=data[mid++];   
+			}   
+
+			while(left&amp;lt;=center){   
+				tmpArr[third++]=data[left++];   
+			}   
+
+			//将中间数组中的内容复制回原数组   
+			while(tmp&amp;lt;=right){   
+				data[tmp]=tmpArr[tmp++];   
+			}   
+			System.out.println(Arrays.toString(data));   
+		}   
+	}   
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;h-基数排序&quot;&gt;h 基数排序&lt;/h2&gt;
+&lt;p&gt;基本思想：将所有待比较数值（正整数）统一为同样的数位长度，数位较短的数前面补零。然后，从最低位开始，依次进行一次排序。这样从最低位排序一直到最高位排序完成以后,数列就变成一个有序序列。 &lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;	radixSort {   
+		int a[]={49,39,98,54,101,56,17,18,23,34,15,35,25,53,51};   
+
+		public radixSort(){   
+			sort(a);   
+			for(inti=0;i&amp;lt;a.length;i++){   
+				System.out.println(a[i]);    
+			}   
+		}     
+
+		public  void sort(int[] array){     
+			//首先确定排序的趟数;     
+			int max=array[0];     
+			for(int i=1;i&amp;lt;array.length;i++){     
+				if(array[i]&amp;gt;max){     
+					max=array[i];     
+				}     
+			}     
+			int time=0;     
+			//判断位数;     
+			while(max&amp;gt;0){     
+				max/=10;     
+				time++;     
+			}     
+
+			//建立10个队列;     
+			List&amp;lt;ArrayList&amp;gt; queue=new ArrayList&amp;lt;ArrayList&amp;gt;();     
+			for(int i=0;i&amp;lt;10;i++){     
+				ArrayList&amp;lt;Integer&amp;gt; queue1=new ArrayList&amp;lt;&amp;gt;();   
+				queue.add(queue1);     
+			}     
+
+			//进行time 次分配和收集;     
+			for(int i=0;i&amp;lt;time;i++){     
+				//分配数组元素;     
+				for(intj=0;j&amp;lt;array.length;j++){     
+					//得到数字的第time+1 位数;   
+					int x=array[j]%(int)Math.pow(10,i+1)/(int)Math.pow(10, i); 
+					ArrayList&amp;lt;Integer&amp;gt;queue2=queue.get(x);   
+					queue2.add(array[j]);   
+					queue.set(x, queue2);   
+				}    
+				int count=0;//元素计数器;     
+				//收集队列元素;     
+				for(int k=0;k&amp;lt;10;k++){   
+					while(queue.get(k).size()&amp;gt;0){   
+						ArrayList&amp;lt;Integer&amp;gt; queue3=queue.get(k);   
+						array[count]=queue3.get(0);     
+						queue3.remove(0);   
+						count++;   
+					}     
+				}     
+			}                
+		}   
+	}   
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;2树结构&quot;&gt;2、树结构&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;	class BinaryNode&amp;lt;T&amp;gt; {
+		BinaryNode&amp;lt;T&amp;gt; left;
+		BinaryNode&amp;lt;T&amp;gt; right;
+		T data;
+
+		boolean isLeaf() {
+			return left == null &amp;amp;&amp;amp; right == null;
+		}
+	}
+
+	class Tree&amp;lt;T extends Comparable&amp;gt; {
+
+		private BinaryNode&amp;lt;T&amp;gt; root;
+
+
+		BinaryNode&amp;lt;T&amp;gt; insert(T data) {
+			checkEmpty(data);
+			root = insert(data,root);
+		}
+
+
+		BinaryNode&amp;lt;T&amp;gt; insert(T data,BinaryNode&amp;lt;T&amp;gt; node) {
+			BinaryNode&amp;lt;T&amp;gt; temp = node;
+
+	 		if(temp == null) {
+	 			temp = new BinaryNode&amp;lt;&amp;gt;();
+	 			temp.data = data;
+	 		}
+
+	 		if(data.compareTo(temp.data) &amp;lt; 0) {
+	 			temp.left = insert(data,temp.left);
+	 		}else if(data.compareTo(temp.data) &amp;gt; 0) {
+	 			temp.right = insert(data,temp.right);
+	 		}
+
+	 		return temp;
+		}
+
+		void checkEmpty(T data) {
+			if(null == data) {
+				throw new IllegalArgument(&quot;data cannot be null&quot;);
+			}
+		}
+
+		void delete(T data) {
+			checkEmpty(data);
+
+			root = delete(data,root);
+		}
+
+		BinaryNode&amp;lt;T&amp;gt; delete(T data,BinaryNode&amp;lt;T&amp;gt; node) {
+
+			if(null == node) return node;
+
+			if(data.compareTo(node.data) &amp;lt; 0) {
+				node.left = delete(data,node.left);
+			}else if(data.compareTo(node.data) &amp;gt;0) {
+				node.right = delete(data,node.right);
+			}else if(node.left != null &amp;amp;&amp;amp; node.right != null) {
+				node.data = findMin(node.right).data;
+				node.right = delete(node.data,node.right);
+			}else {
+				node = node.left ==null ? node.left: node.right;
+			}
+
+			return node;
+
+		}
+
+
+		BinaryNode&amp;lt;T&amp;gt; findMin(BinaryNode&amp;lt;T&amp;gt; node) {
+
+			if(node == null) return node;
+
+			return node = findMin(node.left);	
+
+		}
+
+		int height() {
+			return height(root);
+		}
+
+		int height(BinaryNode&amp;lt;T&amp;gt; node) {
+			if(node == null) return 0;
+
+			int leftHeight = height(node.left);
+			int rightHeight = height(node.right);
+
+			if(leftHeight &amp;gt; rightHeight) ? leftHeight + 1  ： rightHeight + 1;
+		}
+
+
+		int size() {return size(root);}
+
+		int size(BinaryNode&amp;lt;T&amp;gt; node) {
+			if(node == null) return 0;
+
+			return size(node.left) + size(node.right) + 1;
+		}
+
+		void preOrder() {
+			StringBuilder treeOrder = preOrder(root);
+
+			if(treeOrder.length &amp;gt; 1) {return treeOrder.toString().subString(0,treeOrder.size() -1 );}
+
+			return treeOrder;
+		}
+
+		StringBuilder preOrder(BinaryNode&amp;lt;T&amp;gt; node) {
+			StringBuilder treeOrder = new StringBuilder();
+			if(node == null) {return treeOrder;}
+
+			treeOrder.append(node.data)
+					  .append(&quot;,&quot;)
+					  .append(preOrder(node.left))
+					  .append(preOrder(node.right));
+
+			return treeOrder;
+		}
+
+		void preOrder() {
+			StringBuilder treeOrder = new StringBuilder();
+			Stack&amp;lt;BinaryNode&amp;lt;T&amp;gt;&amp;gt; stack = new Stack&amp;lt;&amp;gt;();
+
+			stack.push(root);
+
+			while(stack.isEmpty()) {
+				BinaryNode&amp;lt;T&amp;gt; node = stack.pop();
+
+				if(node == null) {
+					continue;
+				}
+
+				treeOrder.append(node.data)
+					  .append(&quot;,&quot;);
+
+				if(null != node.left) {
+					stack.push(node.left);
+				}
+
+				if(null != node.right) {
+					stack.push(node.right);
+				}
+
+
+			}
+
+			if(treeOrder.length() &amp;gt; 1) {treeOrder.toString().subString(0,treeOrder.length() -1);}
+		}
+
+
+		String postOrderTraverse(){
+		   StringBuffer sb=new StringBuffer();
+		   //构建用于存放结点的栈
+		   LinkedStack&amp;lt;BinaryNode&amp;lt;T&amp;gt;&amp;gt; stack=new LinkedStack&amp;lt;&amp;gt;();
+
+		   BinaryNode&amp;lt;T&amp;gt; currentNode =this.root;
+		   BinaryNode&amp;lt;T&amp;gt; prev=this.root;
+
+		   while (currentNode!=null||!stack.isEmpty()){
+		       //把左子树加入栈中,直到叶子结点为止
+		       while (currentNode!=null){
+		           stack.push(currentNode);
+		           currentNode=currentNode.left;
+		       }
+
+		       //开始访问当前结点父结点的右孩子
+		       if(!stack.isEmpty()){
+		           //获取右孩子，先不弹出
+		           BinaryNode&amp;lt;T&amp;gt; temp=stack.peek().right;
+		           //先判断是否有右孩子或者右孩子是否已被访问过
+		           if(temp==null||temp==prev){//没有右孩子||右孩子已被访问过
+		               //如果没有右孩子或者右孩子已被访问,则弹出父结点并访问
+		               currentNode=stack.pop();
+		               //访问
+		               sb.append(currentNode.data+&quot;,&quot;);
+		               //记录已访问过的结点
+		               prev=currentNode;
+		               //置空当前结点
+		               currentNode=null;
+		           }else {
+		               //有右孩子,则开始遍历右子树
+		               currentNode=temp;
+		           }
+		       }
+
+		   }
+
+		   //去掉最后一个逗号
+		   if(sb.length()&amp;gt;0){
+		       return sb.toString().substring(0,sb.length()-1);
+		   }else {
+		       return sb.toString();
+		   }
+		}
+
+		String levelOrder() {
+
+		   LinkedList&amp;lt;BinaryNode&amp;lt;T&amp;gt;&amp;gt; queue=new LinkedList&amp;lt;&amp;gt;();
+		   StringBuffer sb=new StringBuffer();
+		   BinaryNode&amp;lt;T&amp;gt; p=this.root;
+
+		   while (p!=null){	
+		       sb.append(p.data);
+		       if(p.left!=null){
+		           queue.add(p.left);
+		       }
+
+		       if (p.right!=null){
+		           queue.add(p.right);
+		       }
+		       p=queue.poll();
+		   }
+		   return sb.toString();
+		}
+
+	}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+				<pubDate>Wed, 24 Feb 2016 22:44:00 +0800</pubDate>
+				<link>/blog/DataStrucure-Algorithm.html</link>
+				<guid isPermaLink="true">/blog/DataStrucure-Algorithm.html</guid>
+			</item>
+		
+			<item>
+				<title>MYSQL主从同步原理</title>
+				<description>&lt;h2 id=&quot;整体上来说复制有3个步骤&quot;&gt;整体上来说，复制有3个步骤：&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;master将改变记录到二进制日志(binary log)中（这些记录叫做二进制日志事件，binary log events）；&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;slave将master的binary log events拷贝到它的中继日志(relay log)；&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;slave重做中继日志中的事件，将改变反映它自己的数据。
+下图描述了复制的过程 
+&lt;img src=&quot;/assets/images/posts/java/master_slave.jpg&quot; alt=&quot;MySQL Master-Slave sync&quot; title=&quot;MySQL Master-Slave sync&quot; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;master记录二进制日志。在每个事务更新数据完成之前，master在二日志记录这些改变。MySQL将事务串行的写入二进制日志，即使事务中的语句都是交叉执行的。在事件写入二进制日志完成后，master通知存储引擎提交事务。&lt;/li&gt;
+  &lt;li&gt;slave将master的binary log拷贝到它自己的中继日志。首先，slave开始一个工作线程——I/O线程。I/O线程在master上打开一个普通的连接，然后开始binlog dump process。Binlog dump process从master的二进制日志中读取事件，如果已经跟上master，它会睡眠并等待master产生新的事件。I/O线程将这些事件写入中继日志。
+SQL slave thread（SQL从线程）处理该过程的最后一步。SQL线程从中继日志读取事件，并重放其中的事件而更新slave的数据，使其与master中的数据一致。只要该线程与I/O线程保持一致，中继日志通常会位于OS的缓存中，所以中继日志的开销很小。&lt;/li&gt;
+  &lt;li&gt;在master中也有一个工作线程：和其它MySQL的连接一样，slave在master中打开一个连接也会使得master开始一个线程。复制过程有一个很重要的限制——复制在slave上是串行化的，也就是说master上的并行更新操作不能在slave上并行操作。&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+				<pubDate>Wed, 24 Feb 2016 22:44:00 +0800</pubDate>
+				<link>/blog/MySQL-Master-Slave.html</link>
+				<guid isPermaLink="true">/blog/MySQL-Master-Slave.html</guid>
+			</item>
+		
+	</channel>
+</rss>
