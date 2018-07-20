@@ -1,7 +1,7 @@
 ---
-layout: kafka
-title: RocketMQ 
-date: 2016-02-24 22:44
+layout: post
+title: Kafka 
+date: 2018-07-18 00:06
 image: /assets/images/markdown.jpg
 headerImage: false
 tag:
@@ -10,13 +10,14 @@ tag:
 star: true
 category: blog
 author: Jack
-description: RocketMQ 
+description: Kafka
 ---
 
 
-rocketmq broke status 
+## Fundation
 
+## Architecture
 
-mqadmin topicRoute -n "localhost:9876" -t DUMMY
+##
 
 
