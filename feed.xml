@@ -9,6 +9,10 @@
 			<item>
 				<title>Jekyll&#58; Make presentation page with reveal.js</title>
 				<description>&lt;section&gt;
+	
+&lt;/section&gt;
+
+&lt;section&gt;
 	&lt;script src=&quot;https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.js&quot;&gt;&lt;/script&gt;&lt;div class=&quot;mermaid&quot;&gt; 
 graph TD;
     A--&amp;gt;B;
@@ -60,16 +64,14 @@ graph TD
 
 &lt;section&gt;
 	&lt;script src=&quot;https://cdn.rawgit.com/knsv/mermaid/6.0.0/dist/mermaid.js&quot;&gt;&lt;/script&gt;&lt;div class=&quot;mermaid&quot;&gt;
-
-sequenceDiagram
-Alice -&amp;gt;&amp;gt; Bob: Hello Bob, how are you?
-Bob--&amp;gt;&amp;gt;John: How about you John?
-Bob--x Alice: I am good thanks!
-Bob-x John: I am good thanks!
-Note right of John: Bob thinks a long&lt;br /&gt;long time, so long&lt;br /&gt;that the text does&lt;br /&gt;not fit on a row.
-
-Bob--&amp;gt;Alice: Checking with John...
-Alice-&amp;gt;John: Yes... John, how are you?
+	sequenceDiagram
+	Alice -&amp;gt;&amp;gt; Bob: Hello Bob, how are you?
+	Bob--&amp;gt;&amp;gt;John: How about you John?
+	Bob--x Alice: I am good thanks!
+	Bob-x John: I am good thanks!
+	Note right of John: Bob thinks a long&lt;br /&gt;long time, so long&lt;br /&gt;that the text does&lt;br /&gt;not fit on a row.
+	Bob--&amp;gt;Alice: Checking with John...
+	Alice-&amp;gt;John: Yes... John, how are you?
 
   &lt;/div&gt;
 &lt;/section&gt;
