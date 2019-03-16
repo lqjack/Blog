@@ -67,11 +67,11 @@
                 </li>
                 
                 <li>
-                    <a href="/tags.html">Tags</a>
+                    <a href="/java/Java%20Core.html">Java Core</a>
                 </li>
                 
                 <li>
-                    <a href="/photos/instagram/">Photos: Instagram</a>
+                    <a href="/tags.html">Tags</a>
                 </li>
                 
                 <li>
@@ -107,40 +107,6 @@
 	<div class="row">
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
-<div class="post-preview">
-    <a href="/Test-Slide.html">
-        <h2 class="post-title">            
-            Jekyll&#58; Make presentation page with reveal.js
-        </h2>
-        
-        <div class="post-content-preview">
-            
-	
-
-
-
-	 
-graph TD;
-    A--&gt;B;
-    A--&gt;C;
-    B--&gt;D;
-    C--&gt;D;
-	
-
-
-
-		 
-sequenceDiagram
-    participant John
-    participant Alice
-    ...
-        </div>
-    </a>
-    <p class="post-meta">Posted by Jack on July 20, 2018</p>
-</div>
-
-<hr>
-
 <div class="post-preview">
     <a href="/blog/Sync-Block.html">
         <h2 class="post-title">            
@@ -302,6 +268,30 @@ CPU使用率
 
 <hr>
 
+<div class="post-preview">
+    <a href="/blog/JVM-memory.html">
+        <h2 class="post-title">            
+            JVM内存布局
+        </h2>
+        
+        <div class="post-content-preview">
+            1、程序计数器
+
+当前线程所执行字节码指示器。
+字节码解释是通过改变这个计数器的值来选择下一条所需要执行的字节码指令，分支、循环、跳转、异常处理、线程恢复。
+
+每个线程有独立的程序计数器。
+
+2、Java虚拟栈
+
+线程私有，每个方法在执行同时会创建一个栈帧，用于存储局部变量、操作数栈、动态链接...
+        </div>
+    </a>
+    <p class="post-meta">Posted by Jack on February 24, 2016</p>
+</div>
+
+<hr>
+
 
 <!-- Pager -->
 
@@ -425,7 +415,7 @@ CPU使用率
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2018 lqjack ♪ Powered by Jack.
+                &copy; 2011~2019 lqjack ♪ Powered by Jack.
                 </p>
             </div>
         </div>
