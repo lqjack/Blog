@@ -8,9 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Stay  hungry，Stay  foolish!">
 
-    <title>Page</title>
+    <title>Java Core - Page</title>
 
-    <link rel="canonical" href="http://localhost:4000/page2/">
+    <link rel="canonical" href="http://localhost:4000/untitled.html">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -91,176 +91,153 @@
 </nav>
 
 
-    <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/autumn2.jpg')">
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/autumn2.jpg')
+    }
+</style>
+<header class="intro-header" >
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="site-heading">
-                    <h1>Page</h1>
-                    <hr class="small">
-                    <span class="subheading">在遙遠的地方 一切虔誠終必相遇</span>
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                    </div>
+                    <h1>Java Core</h1>
+                    
+                    <span class="meta">Posted by Jack on February 24, 2016</span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-	<div class="row">
-		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-			
-<div class="post-preview">
-    <a href="/blog/DataStrucure-Algorithm.html">
-        <h2 class="post-title">            
-            二叉树与常用算法
-        </h2>
-        
-        <div class="post-content-preview">
-            1、常用算法
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <p>Java局部变量使用需要赋予初始值：方法在运行时会自动创建局部变量表、操作数栈等；其中局部变量表所需的内存空间在编译期间完成分配，不同的方法的生命周期不同，局部变量会重用局部变量表中的部分位置，这个方法需要在栈帧分配多大的局部变量空间是完全确定的，在方法运行期间不会改变局部变量表的大小。这句话就说明了局部变量在创建时就必须进行初始化以确定分配内存大小。</p>
+
+<p>Java堆存放所有对象的实例，几乎所有的对象实例都在这里分配内存。在hotspot虚拟机中，内存分配后，虚拟机需要将分配到的内存空间都初始化为零值。这一步操作保证了对象的实例字段在java代码中可以不赋初始值就直接使用，程序能访问到的这些字段的数据类型所对应的零值。</p>
 
 
-  插入排序（直接插入排序、希尔排序）
-  交换排序（冒泡排序、快速排序）
-  选择排序（直接选择排序、堆排序）
-  归并排序
-  分配排序（基数排序）
+                <hr>
 
 
-所需辅助空间最多：归并排序 
-所需辅助空间最少：堆排序 
-平均速度最快：快速排序 
-不稳定：快速排序，希尔排序，堆排序...
+                <a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">CC A-S 4.0 International License</a>.
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+                    
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+                <!--
+                <div class="ds-share"
+                    data-thread-key="" data-title="Java Core"
+                    data-images="http://localhost:4000/img/autumn2.jpg"
+                    data-content="Java局部变量使用需要赋予初始值：方法在运行时会自动创建局部变量表、操作数栈等；其中局部变量表所需的内存空间在编译期间完成分配，不同的方法的生命周期不同... | Microdust:Azeril's blog"
+                    data-url="http://localhost:4000/untitled.html">
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                -->
+                <!-- Duoshuo Share end-->
+
+
+
+
+                <!-- 多说评论框 start 
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="" data-title="Java Core" data-url="http://localhost:4000/untitled.html"></div>
+                </div>
+                多说评论框 end -->
+            </div>
         </div>
-    </a>
-    <p class="post-meta">Posted by Jack on February 24, 2016</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/blog/MySQL-Master-Slave.html">
-        <h2 class="post-title">            
-            MYSQL主从同步原理
-        </h2>
-        
-        <div class="post-content-preview">
-            整体上来说，复制有3个步骤：
-
-  master将改变记录到二进制日志(binary log)中（这些记录叫做二进制日志事件，binary log events）；
-  
-    slave将master的binary log events拷贝到它的中继日志(relay log)；
-  
-  ...
-        </div>
-    </a>
-    <p class="post-meta">Posted by Jack on February 24, 2016</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/blog/Build-Jekyll-Environmetn.html">
-        <h2 class="post-title">            
-            Mac下搭建jekyll环境
-        </h2>
-        
-        <div class="post-content-preview">
-            1、安装/升级本地ruby
-安装rvm
-
-可以先 ruby -v 查看下本地ruby版本号，经多次尝试使用ruby2.0.0版本可以正常使用。
-
-网上不少人使用源码安装来替换本地ruby，其实用rvm来管理多版本ruby是更安全、方便的方案。rvm的安装比较简单：
-	curl -L https...
-        </div>
-    </a>
-    <p class="post-meta">Posted by Jack on February 24, 2016</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/blog/Your-Zsh.html">
-        <h2 class="post-title">            
-            Zsh & oh-my-zsh 终端漫游的利器
-        </h2>
-        
-        <div class="post-content-preview">
-            Intro 简介
+    </div>
+</article>
 
 
-    
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) 
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"azeril"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+多说公共JS代码 end -->
 
 
-Zsh 是一个 Unix shell，是 Z shell 的简称。Zsh 作为一款强大的终端工具，能帮助你更高效地编写和执行命令。
-
-主要特性与特性：
-
-
-  Zsh 兼容 bash（Bourne shell），没有什么迁移的学习成本
-  更全面的自动补全功...
-        </div>
-    </a>
-    <p class="post-meta">Posted by Jack on February 24, 2016</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/blog/Proust-Questionnaire.html">
-        <h2 class="post-title">            
-            春末的普鲁斯特问卷
-        </h2>
-        
-        <div class="post-content-preview">
-            关于普鲁斯特问卷
-
-普鲁斯特问卷（Proust Questionnaire）。照维基的介绍是：一种用来调查被提问者个人生活方式、价值观、人生经验等问题的问卷调查。
-
-因普鲁斯特曾做过并给予出知名解答而得名。但他并非是最初的问卷创造者。
-
-中文互联网上寻到的普鲁斯特问答资料多半都没什么明确出处，...
-        </div>
-    </a>
-    <p class="post-meta">Posted by Jack on February 24, 2016</p>
-</div>
-
-<hr>
-
-
-<!-- Pager -->
-
-<ul class="pager">
-    
-    <li class="previous">
-        <a href="/">&larr; Newer Posts</a>
-    </li>
-    
-    
-</ul>
-
-
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-66863061-1', 'auto');
-  ga('send', 'pageview');
 
 </script>
 
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
 
-
-
-		</div>
-	</div>
-</div>
-
-<hr>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
 
   
     <!-- Footer -->
