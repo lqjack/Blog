@@ -49,6 +49,17 @@ for (const themeName of ['default', 'forest', 'dark', 'neutral']) {
  * ```
  */
 const config = {
+
+  /** theme , the CSS style sheet
+  *
+  * **theme** - Choose one of the built-in themes: default, forest, dark or neutral. To disable any pre-defined mermaid theme, use "null".
+  * **themeCSS** - Use your own CSS. This overrides **theme**.
+  *```
+  * "theme": "forest",
+  * "themeCSS": ".node rect { fill: red; }"
+  *```
+  */
+
   theme: 'default',
   themeCSS: undefined,
 
@@ -153,7 +164,12 @@ const config = {
      * **useMaxWidth** - when this flag is set the height and width is set to 100% and is then scaling with the
      * available space if not the absolute space required is used
      */
-    useMaxWidth: true
+    useMaxWidth: true,
+
+    /**
+     * **rightAngles** - this will display arrows that start and begin at the same node as right angles, rather than a curve
+     */
+    rightAngles: false
   },
 
   /** ### gantt

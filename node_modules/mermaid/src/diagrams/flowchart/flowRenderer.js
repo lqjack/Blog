@@ -67,9 +67,10 @@ export const addVertices = function (vert, g) {
     let labelTypeStr = ''
     if (conf.htmlLabels) {
       labelTypeStr = 'html'
-      verticeText = verticeText.replace(/fa:fa[\w-]+/g, function (s) {
-        return '<i class="fa ' + s.substring(3) + '"></i>'
-      })
+      verticeText = verticeText.replace(/fa[lrsb]?:fa-[\w-]+/g, s => `<i class='${s.replace(':', ' ')}'></i>`)
+      if (vertice.link) {
+        verticeText = '<a href="' + vertice.link + '" rel="noopener">' + verticeText + '</a>'
+      }
     } else {
       const svgLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text')
 
@@ -85,7 +86,14 @@ export const addVertices = function (vert, g) {
       }
 
       labelTypeStr = 'svg'
-      verticeText = svgLabel
+      if (vertice.link) {
+        const link = document.createElementNS('http://www.w3.org/2000/svg', 'a')
+        link.setAttributeNS('http://www.w3.org/2000/svg', 'href', vertice.link)
+        link.setAttributeNS('http://www.w3.org/2000/svg', 'rel', 'noopener')
+        verticeText = link
+      } else {
+        verticeText = svgLabel
+      }
     }
 
     let radious = 0
