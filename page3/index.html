@@ -10,7 +10,7 @@
 
     <title>Page</title>
 
-    <link rel="canonical" href="http://localhost:4000/page2/">
+    <link rel="canonical" href="http://localhost:4000/page3/">
 
     <!-- Icons -->
   <link rel="shortcut icon" href="img/favicon.ico">
@@ -108,195 +108,19 @@
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
 <div class="post-preview">
-    <a href="/blog/Java-Concurrent-Best-Practise.html">
+    <a href="/blog/Proust-Questionnaire.html">
         <h2 class="post-title">            
-            线程总结
+            春末的普鲁斯特问卷
         </h2>
         
         <div class="post-content-preview">
-            # 线程同步：
-* 不变形
-* 枷锁
-* 线程封闭
-* 栈封闭
+            ## 关于普鲁斯特问卷
 
+普鲁斯特问卷（Proust Questionnaire）。照维基的介绍是：一种用来调查被提问者个人生活方式、价值观、人生经验等问题的问卷调查。
 
-## Deque BlockDeque
+因普鲁斯特曾做过并给予出知名解答而得名。但他并非是最初的问卷创造者。
 
-### 线程窃取
-# 线程状态：
-1. 新建 		
-2. 就绪  
-3. 阻塞
-4. 运行
-5. 死亡
-
-
-
-# `ConcurrentHashMap>`
-
-
-# 可变状态是至关重要的...
-        </div>
-    </a>
-    <p class="post-meta">Posted by Jack on February 24, 2016</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/blog/Performance-JVM.html">
-        <h2 class="post-title">            
-            JVM架构
-        </h2>
-        
-        <div class="post-content-preview">
-            # JVM内存分配与使用受限于物理内存以及操作系统
-`-XX:UserCompressedOops` 压缩指针
-`-XX:+AggressiveOpts` 添加设置额外的性能优化
-
-
-# VM生命周期：
-
-+ 启动器
-java ,javaw (windows platform),JNI_Cre...
-        </div>
-    </a>
-    <p class="post-meta">Posted by Jack on February 24, 2016</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/blog/performance-os.html">
-        <h2 class="post-title">            
-            性能调优-操作系统篇
-        </h2>
-        
-        <div class="post-content-preview">
-            # 性能监控
-以一种非入侵的方式收集或者查看应用性能数据的活动。监控通常是一种在生产、质量评估或者开发环境中实施的带有预防性或者主动性的活动。
-	
-## CPU使用率
-* 用户态和系统态。用户态CPU使用率：执行应用程序代码的时间占总CPU时间的百分比。系统CPU使用率：执行系统调用的时间占总...
-        </div>
-    </a>
-    <p class="post-meta">Posted by Jack on February 24, 2016</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/blog/JVM-memory.html">
-        <h2 class="post-title">            
-            JVM内存布局
-        </h2>
-        
-        <div class="post-content-preview">
-            # 1、程序计数器
-
-当前线程所执行字节码指示器。
-字节码解释是通过改变这个计数器的值来选择下一条所需要执行的字节码指令，分支、循环、跳转、异常处理、线程恢复。
-
-每个线程有独立的程序计数器。
-
-# 2、Java虚拟栈
-
-线程私有，每个方法在执行同时会创建一个栈帧，用于存储局部变量、操作数栈、...
-        </div>
-    </a>
-    <p class="post-meta">Posted by Jack on February 24, 2016</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/blog/DataStrucure-Algorithm.html">
-        <h2 class="post-title">            
-            二叉树与常用算法
-        </h2>
-        
-        <div class="post-content-preview">
-            # 1、常用算法
-
-* 插入排序（直接插入排序、希尔排序） 
-* 交换排序（冒泡排序、快速排序） 
-* 选择排序（直接选择排序、堆排序） 
-* 归并排序 
-* 分配排序（基数排序） 
-
-所需辅助空间最多：归并排序 
-所需辅助空间最少：堆排序 
-平均速度最快：快速排序 
-不稳定：快速排序，希尔排...
-        </div>
-    </a>
-    <p class="post-meta">Posted by Jack on February 24, 2016</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/blog/MySQL-Master-Slave.html">
-        <h2 class="post-title">            
-            MYSQL主从同步原理
-        </h2>
-        
-        <div class="post-content-preview">
-            ## 整体上来说，复制有3个步骤：   
-* master将改变记录到二进制日志(binary log)中（这些记录叫做二进制日志事件，binary log events）；
-* slave将master的binary log events拷贝到它的中继日志(relay log)；
-
-* sl...
-        </div>
-    </a>
-    <p class="post-meta">Posted by Jack on February 24, 2016</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/blog/Build-Jekyll-Environmetn.html">
-        <h2 class="post-title">            
-            Mac下搭建jekyll环境
-        </h2>
-        
-        <div class="post-content-preview">
-            # 1、安装/升级本地ruby
-## 安装rvm
-
-可以先 ruby -v 查看下本地ruby版本号，经多次尝试使用ruby2.0.0版本可以正常使用。
-
-网上不少人使用源码安装来替换本地ruby，其实用rvm来管理多版本ruby是更安全、方便的方案。rvm的安装比较简单：
-```shell
-...
-        </div>
-    </a>
-    <p class="post-meta">Posted by Jack on February 24, 2016</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/blog/Your-Zsh.html">
-        <h2 class="post-title">            
-            Zsh & oh-my-zsh 终端漫游的利器
-        </h2>
-        
-        <div class="post-content-preview">
-            ## Intro 简介
-
-
-    
- 
-
-
-Zsh 是一个 Unix shell，是 Z shell 的简称。Zsh 作为一款强大的终端工具，能帮助你更高效地编写和执行命令。
-
-主要特性与特性：
-
-- Zsh 兼容 bash（Bourne shell），没有什么迁移的学习成本
-- 更全面的自...
+中文互联网上寻到的普鲁斯特问答资料多半都没什么明确...
         </div>
     </a>
     <p class="post-meta">Posted by Jack on February 24, 2016</p>
@@ -310,13 +134,9 @@ Zsh 是一个 Unix shell，是 Z shell 的简称。Zsh 作为一款强大的终�
 <ul class="pager">
     
     <li class="previous">
-        <a href="/">&larr; Newer Posts</a>
+        <a href="/page2">&larr; Newer Posts</a>
     </li>
     
-    
-    <li class="next">
-        <a href="/page3">Older Posts &rarr;</a>
-    </li>
     
 </ul>
 
