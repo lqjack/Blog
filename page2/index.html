@@ -114,29 +114,29 @@
         </h2>
         
         <div class="post-content-preview">
-            # 线程同步：
-* 不变形
-* 枷锁
-* 线程封闭
-* 栈封闭
+            线程同步：
+
+  不变形
+  枷锁
+  线程封闭
+  栈封闭
 
 
-## Deque BlockDeque
+Deque BlockDeque
 
-### 线程窃取
-# 线程状态：
-1. 新建 		
-2. 就绪  
-3. 阻塞
-4. 运行
-5. 死亡
+线程窃取
+线程状态：
 
-
-
-# `ConcurrentHashMap>`
+  新建
+  就绪
+  阻塞
+  运行
+  死亡
 
 
-# 可变状态是至关重要的...
+ConcurrentHashMap&lt;String,Future&lt;?&gt;&gt;
+
+可变状态是至关重...
         </div>
     </a>
     <p class="post-meta">Posted by Jack on February 24, 2016</p>
@@ -151,15 +151,16 @@
         </h2>
         
         <div class="post-content-preview">
-            # JVM内存分配与使用受限于物理内存以及操作系统
-`-XX:UserCompressedOops` 压缩指针
-`-XX:+AggressiveOpts` 添加设置额外的性能优化
+            JVM内存分配与使用受限于物理内存以及操作系统
+-XX:UserCompressedOops 压缩指针
+-XX:+AggressiveOpts 添加设置额外的性能优化
+
+VM生命周期：
 
 
-# VM生命周期：
+  启动器
 
-+ 启动器
-java ,javaw (windows platform),JNI_Cre...
+java ,javaw (windows platform),JNI_CreateJava...
         </div>
     </a>
     <p class="post-meta">Posted by Jack on February 24, 2016</p>
@@ -174,11 +175,12 @@ java ,javaw (windows platform),JNI_Cre...
         </h2>
         
         <div class="post-content-preview">
-            # 性能监控
+            性能监控
 以一种非入侵的方式收集或者查看应用性能数据的活动。监控通常是一种在生产、质量评估或者开发环境中实施的带有预防性或者主动性的活动。
-	
-## CPU使用率
-* 用户态和系统态。用户态CPU使用率：执行应用程序代码的时间占总CPU时间的百分比。系统CPU使用率：执行系统调用的时间占总...
+
+CPU使用率
+
+  用户态和系统态。用户态CPU使用率：执行应用程序代码的时间占总CPU时间的百分比。系统CPU使用率：执行系统调用的时间占总CPU时间...
         </div>
     </a>
     <p class="post-meta">Posted by Jack on February 24, 2016</p>
@@ -193,16 +195,16 @@ java ,javaw (windows platform),JNI_Cre...
         </h2>
         
         <div class="post-content-preview">
-            # 1、程序计数器
+            1、程序计数器
 
 当前线程所执行字节码指示器。
 字节码解释是通过改变这个计数器的值来选择下一条所需要执行的字节码指令，分支、循环、跳转、异常处理、线程恢复。
 
 每个线程有独立的程序计数器。
 
-# 2、Java虚拟栈
+2、Java虚拟栈
 
-线程私有，每个方法在执行同时会创建一个栈帧，用于存储局部变量、操作数栈、...
+线程私有，每个方法在执行同时会创建一个栈帧，用于存储局部变量、操作数栈、动态链接...
         </div>
     </a>
     <p class="post-meta">Posted by Jack on February 24, 2016</p>
@@ -217,18 +219,20 @@ java ,javaw (windows platform),JNI_Cre...
         </h2>
         
         <div class="post-content-preview">
-            # 1、常用算法
+            1、常用算法
 
-* 插入排序（直接插入排序、希尔排序） 
-* 交换排序（冒泡排序、快速排序） 
-* 选择排序（直接选择排序、堆排序） 
-* 归并排序 
-* 分配排序（基数排序） 
+
+  插入排序（直接插入排序、希尔排序）
+  交换排序（冒泡排序、快速排序）
+  选择排序（直接选择排序、堆排序）
+  归并排序
+  分配排序（基数排序）
+
 
 所需辅助空间最多：归并排序 
 所需辅助空间最少：堆排序 
 平均速度最快：快速排序 
-不稳定：快速排序，希尔排...
+不稳定：快速排序，希尔排序，堆排序...
         </div>
     </a>
     <p class="post-meta">Posted by Jack on February 24, 2016</p>
@@ -243,11 +247,13 @@ java ,javaw (windows platform),JNI_Cre...
         </h2>
         
         <div class="post-content-preview">
-            ## 整体上来说，复制有3个步骤：   
-* master将改变记录到二进制日志(binary log)中（这些记录叫做二进制日志事件，binary log events）；
-* slave将master的binary log events拷贝到它的中继日志(relay log)；
+            整体上来说，复制有3个步骤：
 
-* sl...
+  master将改变记录到二进制日志(binary log)中（这些记录叫做二进制日志事件，binary log events）；
+  
+    slave将master的binary log events拷贝到它的中继日志(relay log)；
+  
+  ...
         </div>
     </a>
     <p class="post-meta">Posted by Jack on February 24, 2016</p>
@@ -262,14 +268,13 @@ java ,javaw (windows platform),JNI_Cre...
         </h2>
         
         <div class="post-content-preview">
-            # 1、安装/升级本地ruby
-## 安装rvm
+            1、安装/升级本地ruby
+安装rvm
 
 可以先 ruby -v 查看下本地ruby版本号，经多次尝试使用ruby2.0.0版本可以正常使用。
 
 网上不少人使用源码安装来替换本地ruby，其实用rvm来管理多版本ruby是更安全、方便的方案。rvm的安装比较简单：
-```shell
-...
+	curl -L https...
         </div>
     </a>
     <p class="post-meta">Posted by Jack on February 24, 2016</p>
@@ -284,19 +289,19 @@ java ,javaw (windows platform),JNI_Cre...
         </h2>
         
         <div class="post-content-preview">
-            ## Intro 简介
+            Intro 简介
 
 
     
- 
 
 
 Zsh 是一个 Unix shell，是 Z shell 的简称。Zsh 作为一款强大的终端工具，能帮助你更高效地编写和执行命令。
 
 主要特性与特性：
 
-- Zsh 兼容 bash（Bourne shell），没有什么迁移的学习成本
-- 更全面的自...
+
+  Zsh 兼容 bash（Bourne shell），没有什么迁移的学习成本
+  更全面的自动补全功...
         </div>
     </a>
     <p class="post-meta">Posted by Jack on February 24, 2016</p>
