@@ -1,0 +1,34 @@
+I"b<h2 id="内部元素">内部元素</h2>
+<ul>
+  <li>内容： 包含基本类型，线性、有限特定基本类型序列。</li>
+  <li>容量（capacity) : Buffer对象最大能写入的大小、不变量。</li>
+  <li>最大读取位置(limit) : Buffer对象当前写入的最大位置，读取时候最大的读取位置。</li>
+  <li>当前位置(position) : 当前索引，下一个要写入和读取的位置。</li>
+</ul>
+
+<ol>
+  <li>A buffer’s capacity is the number of elements it contains. The capacity of a buffer is never negative and never changes.</li>
+  <li>A buffer’s limit is the index of the first element that should not be read or written. A buffer’s limit is never negative and is never greater than its capacity.</li>
+  <li>A buffer’s position is the index of the next element to be read or written. A buffer’s position is never negative and is never greater than its limit.</li>
+</ol>
+
+<h4 id="几个概念的关系">几个概念的关系：</h4>
+<p><strong>0 &lt;= mark &lt;= position &lt;= limit &lt;= capacity</strong></p>
+
+<h2 id="易混淆方法">易混淆方法</h2>
+<ul>
+  <li>clear: 设置limit为capacity,position为零。</li>
+  <li>flipping: 设置limit为当前位置,position为零。</li>
+  <li>rewinding: limit未设置,position为零。</li>
+</ul>
+
+<ol>
+  <li>clear makes a buffer ready for a new sequence of channel-read or relative put operations: It sets the limit to the capacity and the position to zero.</li>
+  <li>flip makes a buffer ready for a new sequence of channel-write or relative get operations: It sets the limit to the current position and then sets the position to zero.</li>
+  <li>rewind makes a buffer ready for re-reading the data that it already contains: It leaves the limit unchanged and sets the position to zero.</li>
+</ol>
+
+<h2 id="实现">实现</h2>
+<p>Buffer 抽象类，由Builder模式设计与实现。</p>
+
+:ET

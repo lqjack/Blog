@@ -71,6 +71,10 @@
                 </li>
                 
                 <li>
+                    <a href="/mutil_version_support.html">Java 多版本支持 思路</a>
+                </li>
+                
+                <li>
                     <a href="/tags.html">Tags</a>
                 </li>
                 
@@ -107,6 +111,75 @@
 	<div class="row">
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
+<div class="post-preview">
+    <a href="/blog/MySQL-Master-Slave.html">
+        <h2 class="post-title">            
+            MYSQL主从同步原理
+        </h2>
+        
+        <div class="post-content-preview">
+            整体上来说，复制有3个步骤：
+
+  master将改变记录到二进制日志(binary log)中（这些记录叫做二进制日志事件，binary log events）；
+  
+    slave将master的binary log events拷贝到它的中继日志(relay log)；
+  
+  ...
+        </div>
+    </a>
+    <p class="post-meta">Posted by Jack on February 24, 2016</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/blog/Build-Jekyll-Environmetn.html">
+        <h2 class="post-title">            
+            Mac下搭建jekyll环境
+        </h2>
+        
+        <div class="post-content-preview">
+            1、安装/升级本地ruby
+安装rvm
+
+可以先 ruby -v 查看下本地ruby版本号，经多次尝试使用ruby2.0.0版本可以正常使用。
+
+网上不少人使用源码安装来替换本地ruby，其实用rvm来管理多版本ruby是更安全、方便的方案。rvm的安装比较简单：
+	curl -L https...
+        </div>
+    </a>
+    <p class="post-meta">Posted by Jack on February 24, 2016</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/blog/Your-Zsh.html">
+        <h2 class="post-title">            
+            Zsh & oh-my-zsh 终端漫游的利器
+        </h2>
+        
+        <div class="post-content-preview">
+            Intro 简介
+
+
+    
+
+
+Zsh 是一个 Unix shell，是 Z shell 的简称。Zsh 作为一款强大的终端工具，能帮助你更高效地编写和执行命令。
+
+主要特性与特性：
+
+
+  Zsh 兼容 bash（Bourne shell），没有什么迁移的学习成本
+  更全面的自动补全功...
+        </div>
+    </a>
+    <p class="post-meta">Posted by Jack on February 24, 2016</p>
+</div>
+
+<hr>
+
 <div class="post-preview">
     <a href="/blog/Proust-Questionnaire.html">
         <h2 class="post-title">            
@@ -251,7 +324,7 @@
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2019 lqjack ♪ Powered by Jack.
+                &copy; 2011~2020 lqjack ♪ Powered by Jack.
                 </p>
             </div>
         </div>

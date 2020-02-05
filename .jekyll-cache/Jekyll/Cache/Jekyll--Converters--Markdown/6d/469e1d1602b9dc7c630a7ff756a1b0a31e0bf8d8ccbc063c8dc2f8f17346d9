@@ -1,0 +1,54 @@
+I"
+<h1 id="1安装升级本地ruby">1、安装/升级本地ruby</h1>
+<h2 id="安装rvm">安装rvm</h2>
+
+<p>可以先 ruby -v 查看下本地ruby版本号，经多次尝试使用ruby2.0.0版本可以正常使用。</p>
+
+<p>网上不少人使用源码安装来替换本地ruby，其实用rvm来管理多版本ruby是更安全、方便的方案。rvm的安装比较简单：</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	curl <span class="nt">-L</span> https://get.rvm.io | bash <span class="nt">-s</span> stable
+</code></pre></div></div>
+
+<p>安装好rvm后需要按照提示</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="nb">source</span> ~/.bash_profile
+</code></pre></div></div>
+<p>将rvm添加到环境变量中。</p>
+
+<p>安装ruby
+接下来可以正式安装ruby了，这里可以先通过 rvm use 命令来获取详细的版本号，安装过程可参考以下代码：</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	rvm <span class="nb">install </span>ruby <span class="nt">-v</span> 2.0
+</code></pre></div></div>
+
+<p>当出现错误：
+Can’t install RMagick 2.13.1. Can’t find MagickWand.h.
+<em>** extconf.rb failed **</em>
+Could not create Makefile due to some reason, probably lack of
+necessary libraries and/or headers.  Check the mkmf.log file for more
+details.  You may need configuration options.</p>
+
+<p>请尝试以下操作：
+It looks like ImageMagick 7 changed include file path.</p>
+
+<p>On building rmagick, since it includes file as wand/MagickWand.h There are no workarounds. It looks like sticking with ImageMagick 6 for now.</p>
+
+<p>On Mac OS X (I tested on Sierra), I used HomeBrew’s versions tap like:</p>
+
+<p>brew tap homebrew/versions
+brew install imagemagick@6
+Then, use the path showen on above installation:</p>
+
+<p>PKG_CONFIG_PATH=/usr/local/opt/imagemagick@6/lib/pkgconfig gem install rmagick
+To install with ImageMagick 6.</p>
+
+<h1 id="2安装jekyll">2、安装jekyll</h1>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	gem <span class="nb">install </span>jekyll
+</code></pre></div></div>
+
+<h1 id="3测试">3、测试</h1>
+<p>安装完成后，切换到项目根目录，运行</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	jekyll server<span class="o">(</span>s<span class="o">)</span>
+</code></pre></div></div>
+<p>,可以通过localhost:4000访问。</p>
+
+:ET

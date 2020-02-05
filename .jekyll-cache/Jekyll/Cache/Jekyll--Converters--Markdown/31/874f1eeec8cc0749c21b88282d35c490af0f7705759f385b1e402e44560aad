@@ -1,0 +1,79 @@
+I"a<h1 id="1session生命周期">1、Session生命周期</h1>
+<hr />
+
+<h2 id="创建">创建</h2>
+<p>Session创建再服务端，当请求JSP,Servlet时候才会创建（包含SessionId)，默认情况下服务端会将JSESSIONID通过Cookie发送给客户端，一般maxAge属性为-1,表示仅对当前浏览器有效，各个浏览器窗口不共享，关闭浏览器就会失效。因此同一机器的两个浏览器窗口访问服务器时，会生成两个不同的Session。但是由浏览器窗口内的链接、脚本等打开的新窗口（也就是说不是双击桌面浏览器图标等打开的窗口）除外。这类子窗口会共享父窗口的Cookie，因此会共享一个Session。只访问HTML,图片等静态资源不会创建。</p>
+
+<p>注意：新开的浏览器窗口会生成新的Session，但子窗口除外。子窗口会共用父窗口的Session。例如，在链接上右击，在弹出的快捷菜单中选择”在新窗口中打开”时，子窗口便可以访问父窗口的Session。</p>
+
+<p>再次访问时候，会将JSESSIONID放置在请求头中发送。Session根据该Cookie值是否同一用户。</p>
+
+<pre><code class="language-Java">	request.getSession(true);
+</code></pre>
+<p>若包含参数true,服务器会先从请求中查看是否包含sessionId。若找到对应的Session则直接返回，否则创建一个新的session对象。
+若参数为false,若找不到sessionId对应的对象，则返回null。</p>
+
+<p>若用户禁用Cookie时候，不能通过服务端通过客户端保存SessionID，可以通过URL重写或者隐藏字段发送请求。可以使用以下语句是否为true,判断客户端是否启用Cookie:</p>
+<pre><code class="language-JavaScript">	navigator.cookieEnabled
+</code></pre>
+
+<h2 id="销毁">销毁</h2>
+<p>设置Session超时时间有以下三种方式：</p>
+
+<ol>
+  <li>方法体内的参数interval为秒。
+    <pre><code class="language-Java">HttpSession ses = request.getSession();
+session.setMaxInactiveInterval(interval);
+</code></pre>
+  </li>
+  <li>web.xml里配置如下信息
+    <pre><code class="language-XML"> &lt;session-config&gt;
+     &lt;session-timeout&gt;时间长度（单位为分钟）&lt;/session-timeout&gt;
+ &lt;/session-config&gt;
+</code></pre>
+  </li>
+  <li>在tomcat/conf/server.xml中定义defaultSessionTimeOut=时间长度（分钟），默认是30分钟。
+三种方式中当值为-1时，session永不失效。优先级：(1)&gt;(2)&gt;(3)。</li>
+</ol>
+
+<ul>
+  <li>服务器会把超时的session进行清除。</li>
+  <li>调用session.invalidate()。</li>
+  <li>服务器进程被停止.</li>
+</ul>
+
+<h1 id="2cookie应用">2、Cookie应用</h1>
+<hr />
+
+<h2 id="如何使用cookie检测初访者">如何使用cookie检测初访者</h2>
+<ul>
+  <li>调用HttpServletRequest.getCookies()获取Cookie数组</li>
+  <li>在循环中检索指定名字的cookie是否存在以及对应的值是否正确</li>
+  <li>如果是则退出循环并设置区别标识</li>
+  <li>根据区别标识判断用户是否为初访者从而进行不同的操作</li>
+</ul>
+
+<h2 id="使用cookie检测初访者的常见错误">使用cookie检测初访者的常见错误</h2>
+<ul>
+  <li>不能仅仅因为cookie数组中不存在在特定的数据项就认为用户是个初访者。如果cookie数组为null，客户可能是一个初访者，也可能是由于用户将cookie删除或禁用造成的结果。</li>
+  <li>但是，如果数组非null,也不过是显示客户曾经到过你的网站或域，并不能说明他们曾经访问过你的servlet。其它servlet、JSP页面以及非Java Web应用都可以设置cookie，依据路径的设置，其中的任何cookie都有可能返回给用户的浏览器。</li>
+  <li>正确的做法是判断cookie数组是否为空且是否存在指定的Cookie对象且值正确。</li>
+</ul>
+
+<h2 id="使用cookie属性的注意问题">使用cookie属性的注意问题</h2>
+<ul>
+  <li>属性是从服务器发送到浏览器的报头的一部分；但它们不属于由浏览器返回给服务器的报头。　</li>
+  <li>因此除了名称和值之外，cookie属性只适用于从服务器输出到客户端的cookie；服务器端来自于浏览器的cookie并没有设置这些属性。　</li>
+  <li>因而不要期望通过request.getCookies得到的cookie中可以使用这个属性。这意味着，你不能仅仅通过设置cookie的最大时效，发出它，在随后的输入数组中查找适当的cookie,读取它的值，修改它并将它存回Cookie，从而实现不断改变的cookie值。</li>
+</ul>
+
+<h2 id="如何使用cookie记录各个用户的访问计数">如何使用cookie记录各个用户的访问计数</h2>
+<ul>
+  <li>获取cookie数组中专门用于统计用户访问次数的cookie的值</li>
+  <li>将值转换成int型</li>
+  <li>将值加1并用原来的名称重新创建一个Cookie对象</li>
+  <li>重新设置最大时效</li>
+  <li>将新的cookie输出</li>
+</ul>
+
+:ET
