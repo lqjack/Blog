@@ -2,10 +2,213 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6b7b052e-1979-4494-9b4e-3d41c6ad1c19" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jack@lan" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jack@localhost" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/liu@localhost" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2019-03-18-exceptions.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resume.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/_config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_includes/alert" beforeDir="false" afterPath="$PROJECT_DIR$/_includes/alert.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_includes/footer.html" beforeDir="false" afterPath="$PROJECT_DIR$/_includes/footer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_includes/head.html" beforeDir="false" afterPath="$PROJECT_DIR$/_includes/head.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_layouts/default.html" beforeDir="false" afterPath="$PROJECT_DIR$/_layouts/default.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_layouts/gallery_index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_layouts/gallery_index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_layouts/gallery_page.html" beforeDir="false" afterPath="$PROJECT_DIR$/_layouts/gallery_page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_layouts/post.html" beforeDir="false" afterPath="$PROJECT_DIR$/_layouts/post.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_posts/build-indigo-theme.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_posts/free-work.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_posts/issue.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/feed.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/Themes/Balzac-for-Jekyll.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/Themes/BlogThemesX.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/Themes/Business-Casual.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/Themes/Centrarium.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/Themes/Clean-Blog.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/Themes/Clean.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/Themes/Feeling-Responsive.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/Themes/Freshman21.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/Themes/Hmfaysal-Omega-Theme.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/Themes/Kunka.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/Themes/Lanyon.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/Themes/Minimal-Mistakes.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/Themes/Rusty-Shutter.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/Themes/Scribble.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/Themes/Shiori.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/Themes/Slim-Pickins-Jekyll-Theme.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/Themes/So-Simple-Theme.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/Themes/Twister-Jekyll-Theme.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/Zero.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/alone.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/autumn.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/autumn2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/bay.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/birds.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/dolphin.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/elephant.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/fantasy.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/grass.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/hacker.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/mermaid/class.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/mermaid/flow.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/mermaid/gantt.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/mermaid/git.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/mermaid/header.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/mermaid/sequence.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/photos/img/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/photos/instagram/gallery-example-1-thumb.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/photos/instagram/gallery-example-1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/photos/instagram/gallery-example-2-thumb.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/photos/instagram/gallery-example-2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/photos/instagram/gallery-example-3-thumb.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/photos/instagram/gallery-example-3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/photos/instagram/gallery-example-4-thumb.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/photos/instagram/gallery-example-4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/photos/instagram/insta2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/photos/instagram/insta3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/photos/instagram/insta4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/photos/instagram/insta5.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/photos/instagram/insta6.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/photos/instagram/insta7.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/photos/instagram/mountain.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/photos/instagram/net.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/plane.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/plane2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/seagulls.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/sky2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/tree.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/umbrella.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/basic-paxos-failed.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/basic-paxos.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/master_slave.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/muti-paxos.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java/state-in-zookeeper.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/class/classDb.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/class/classDiagram.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/class/classRenderer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/class/parser/classDiagram.jison" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/class/parser/classDiagram.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/flowchart/flowDb.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/flowchart/flowRenderer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/flowchart/parser/flow.jison" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/flowchart/parser/flow.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/flowchart/parser/flow.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/gantt/gantt.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/gantt/ganttDb.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/gantt/ganttDb.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/gantt/ganttRenderer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/gantt/parser/gantt.jison" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/gantt/parser/gantt.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/git/gitGraphAst.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/git/gitGraphParser.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/git/gitGraphRenderer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/git/parser/gitGraph.jison" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/git/parser/gitGraph.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/sequence/parser/sequenceDiagram.jison" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/sequence/parser/sequenceDiagram.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/sequence/sequenceDb.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/sequence/sequenceDiagram.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/sequence/sequenceRenderer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/diagrams/sequence/svgDraw.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/logger.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/mermaid.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/mermaid.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/mermaidAPI.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/mermaidAPI.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/themes/class.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/themes/dark/index.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/themes/default/index.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/themes/flowchart.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/themes/forest/index.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/themes/gantt.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/themes/git.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/themes/mermaid.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/themes/neutral/index.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/themes/sequence.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mermaid/utils.spec.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mutil_version_support.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ngnix-install.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/.travis.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/CONTRIBUTING.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/Gruntfile.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/bower.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/print/paper.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/print/pdf.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/reveal.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/reveal.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/beige.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/black.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/blood.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/league.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/moon.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/night.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/serif.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/simple.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/sky.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/solarized.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/source/beige.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/source/black.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/source/blood.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/source/league.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/source/moon.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/source/night.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/source/serif.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/source/simple.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/source/sky.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/source/solarized.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/source/white.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/template/mixins.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/template/settings.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/template/theme.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/css/theme/white.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/js/reveal.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/css/zenburn.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/font/league-gothic/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/font/league-gothic/league-gothic.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/font/league-gothic/league-gothic.eot" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/font/league-gothic/league-gothic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/font/league-gothic/league-gothic.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/font/source-sans-pro/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/font/source-sans-pro/source-sans-pro-italic.eot" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/font/source-sans-pro/source-sans-pro-italic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/font/source-sans-pro/source-sans-pro-italic.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/font/source-sans-pro/source-sans-pro-regular.eot" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/font/source-sans-pro/source-sans-pro-regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/font/source-sans-pro/source-sans-pro-regular.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/font/source-sans-pro/source-sans-pro-semibold.eot" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/font/source-sans-pro/source-sans-pro-semibold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/font/source-sans-pro/source-sans-pro-semibold.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/font/source-sans-pro/source-sans-pro-semibolditalic.eot" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/font/source-sans-pro/source-sans-pro-semibolditalic.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/font/source-sans-pro/source-sans-pro-semibolditalic.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/font/source-sans-pro/source-sans-pro.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/js/classList.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/js/head.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/lib/js/html5shiv.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/plugin/highlight/highlight.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/plugin/markdown/example.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/plugin/markdown/example.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/plugin/markdown/markdown.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/plugin/markdown/marked.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/plugin/math/math.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/plugin/multiplex/client.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/plugin/multiplex/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/plugin/multiplex/master.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/plugin/multiplex/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/plugin/notes-server/client.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/plugin/notes-server/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/plugin/notes-server/notes.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/plugin/notes/notes.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/plugin/notes/notes.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/plugin/print-pdf/print-pdf.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/plugin/search/search.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/reveal.js/plugin/zoom-js/zoom.js" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -20,11 +223,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="package.json" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/package.json">
+      <file leaf-file-name="_config.yml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/_config.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="10" column="24" lean-forward="true" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="24" />
+            <state relative-caret-position="351">
+              <caret line="80" lean-forward="true" selection-start-line="80" selection-end-line="80" />
             </state>
           </provider>
         </entry>
@@ -35,6 +238,11 @@
     <findStrings>
       <find>clean-blog.min.js</find>
       <find>minimatch</find>
+      <find>gallery</find>
+      <find>paginate</find>
+      <find>paginate_path</find>
+      <find>jquery.min.js</find>
+      <find>alert</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/_includes</dir>
@@ -48,6 +256,18 @@
       <map>
         <entry key="$USER_HOME$/java/workspace-home/git/spring-security-saml" value="PREVIEW" />
       </map>
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/_includes/open-embed.html" />
+        <option value="$PROJECT_DIR$/_layouts/default.html" />
+        <option value="$PROJECT_DIR$/_layouts/post.html" />
+        <option value="$PROJECT_DIR$/_includes/head.html" />
+        <option value="$PROJECT_DIR$/_includes/footer.html" />
+        <option value="$PROJECT_DIR$/_config.yml" />
+      </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" fullScreen="true">
@@ -259,6 +479,7 @@
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
+      <autoscrollFromSource ProjectPane="true" />
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
@@ -269,12 +490,17 @@
               <item name="lqjack.github.io" type="b2602c69:ProjectViewProjectNode" />
               <item name="lqjack.github.io" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="lqjack.github.io" type="b2602c69:ProjectViewProjectNode" />
+              <item name="lqjack.github.io" type="462c0819:PsiDirectoryNode" />
+              <item name="_includes" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -374,13 +600,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/_includes/footer.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="103" column="38" selection-start-line="103" selection-start-column="21" selection-end-line="103" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/_site/photos/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
@@ -393,25 +612,10 @@
         <state relative-caret-position="-174" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jack@lan">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LICENSE">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/liu@localhost">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/Interview.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-278" />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tags.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/2019-03-18-exceptions.md">
-      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/404.html">
       <provider selected="true" editor-type-id="text-editor">
@@ -431,6 +635,68 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
           <caret line="10" column="24" lean-forward="true" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/2019-03-18-exceptions.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="259">
+          <caret line="32" column="16" selection-start-line="32" selection-start-column="16" selection-end-line="32" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_includes/open-embed.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="730">
+          <caret line="93" column="9" selection-start-line="93" selection-start-column="9" selection-end-line="93" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_layouts/default.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="15" column="30" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_layouts/page.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_layouts/post.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="730">
+          <caret line="36" selection-start-line="36" selection-end-line="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_includes/algolia.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_includes/head.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="499">
+          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_includes/alert.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="166">
+          <caret line="8" column="10" selection-start-line="8" selection-start-column="10" selection-end-line="8" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_includes/footer.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="317">
+          <caret line="104" column="77" lean-forward="true" selection-start-line="104" selection-start-column="63" selection-end-line="104" selection-end-column="77" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_config.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="80" lean-forward="true" selection-start-line="80" selection-end-line="80" />
         </state>
       </provider>
     </entry>

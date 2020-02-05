@@ -4,15 +4,14 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <ul class="list-inline text-center">
-                    <!--
-                    <li>
-                        <a href="{{ "/feed.xml" | prepend: site.baseurl }}">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
-                            </span>
-                        </a>
-                    </li>
+                    <!--<li>-->
+                        <!--<a href="{{ "/feed.xml" | prepend: site.baseurl }}">-->
+                            <!--<span class="fa-stack fa-lg">-->
+                                <!--<i class="fa fa-circle fa-stack-2x"></i>-->
+                                <!--<i class="fa fa-rss fa-stack-1x fa-inverse"></i>-->
+                            <!--</span>-->
+                        <!--</a>-->
+                    <!--</li>-->
                     
                     {% if site.twitter_username %}
                     <li>
@@ -24,7 +23,6 @@
                         </a>
                     </li>
                     {% endif %}
-                    -->
 
                     {% if site.github_username %}
                     <li>
@@ -37,7 +35,6 @@
                     </li>
                     {% endif %}
                     
-                    <!--
                     {% if site.douban_username %}
                     <li>
                         <a href="http://www.douban.com/people/{{ site.douban_username }}">
@@ -83,16 +80,38 @@
                         </a>
                     </li>
                     {% endif %}
-                    -->
-
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~{{ site.time | date: '%Y' }} {{ site.owner.name }} ♪ Powered by Jack.
+                &copy; 2020~{{ site.time | date: '%Y' }} {{ site.owner.name }} ♪ Powered by Jack.
                 </p>
             </div>
         </div>
     </div>
 </footer>
+
+cb-footer-add.html
+<!-- baidu analysis -->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?563a796aab67414bd0f49d4ba18c234b";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-157817670-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-157817670-1');
+</script>
+
+
 
 <!-- jQuery -->
 <script src="{{ "/js/jquery.min.js " | prepend: site.baseurl }}"></script>
@@ -103,13 +122,9 @@
 <!-- Custom Theme JavaScript -->
 <script src="{{ "/js/clean-blog.min.js " | prepend: site.baseurl }}"></script>
 
-
-
-
 <!-- Highlight.js -->
 <script>
     async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
         hljs.initHighlightingOnLoad();
     })
 </script>
-<link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
