@@ -96,7 +96,7 @@ defaults:
     values:
       layout: "post"
       author: "Jack"
-      header-img: "img/fantasy.jpg"
+      header-img: "images/fantasy.jpg"
 
 gallery:
   dir: images             # Path to the gallery
