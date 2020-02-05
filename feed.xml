@@ -7,6 +7,247 @@
 		<atom:link href="/" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>查询性能优化</title>
+				<description>&lt;p&gt;1, 慢查询基础&lt;/p&gt;
+
+&lt;p&gt;向数据库请求了不需要的数据&lt;/p&gt;
+
+&lt;p&gt;响应时间 服务时间 + 等待时间（IO/锁）&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;扫描表 通过设置db_block_multiblock_read_count可以设置一次IO能读取的数据块个数，从而有效减少全表扫描时的IO总次数，也就是通过预读机制将将要访问的数据块预先读入内存中。只有在全表扫描情况下才能使用多块读操作。
+
+
+扫描索引 
+范围访问 1，在唯一索引上使用了range操作符（&amp;gt;,&amp;lt;,&amp;lt;&amp;gt;,&amp;gt;=,&amp;lt;=,between）；2，在组合索引上，只使用部分列进行查询；3，对非唯一索引上的列进行的查询。
+单值访问 
+rowid访问（oracle) 由于rowid中记录了行存储的位置，所以这是oracle存取单行数据的最快方法。	
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;扫描的数据
+返回的数据&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;MySQL使用如下三种方式应用Where条件，从好到坏
+a, 索引中使用where条件过滤不匹配的记录，在存储引擎完成
+b, 使用索引覆盖扫描来返回记录，直接从索引中过滤不需要的记录并返回命中的结果，在服务层完成
+c, 从数据中返回数据，然后过滤不满足条件的结果，这是在MySQL服务层完成的。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;2, 重构查询方式&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;一个复杂的查询还是多个简单查询
+切分查询
+分解关联查询
+	优点：
+		缓存效率更高
+		减少锁竞争
+		应用层做关联，更容易高性能和扩展
+		查询本身可以提高
+		可以减少冗余，应用层查询，只需要查询一次
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;3, 查询基础&lt;/p&gt;
+
+&lt;p&gt;查询流程：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;客户端发送查询到服务器
+服务器查询缓存，命中直接返回
+服务器进行SQL解析，预处理，优化器生成执行计划
+调用存储层API执行存储计划
+将结果返回给调用者
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;通信协议： 半双工（服务器端发送或者客户端发送数据），一旦开始发送，另一端必须接受所有的数据&lt;/p&gt;
+
+&lt;p&gt;查询状态&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	sleep  线程等待客户端的请求
+	query  执行查询/结果返回给客户端
+	locked 服务层线程等待锁
+	analyzing and statstics 收集存储引擎的统计信息，生成执行计划
+	copy to the tmp table [on disk] 结果复制到临时表
+	sorting result 对结果进行排序
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;查询缓存&lt;/p&gt;
+
+&lt;p&gt;查询优化处理&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;语法解析和预处理
+查询优化器
+
+	优化器由于错误原因导致选择执行计划	
+
+		统计信息不准确
+		执行计划的成本估算不等同与实际的执行成本
+		没有考虑并发执行
+		可能不是基于成本估计的
+
+
+	能够处理的优化类型：
+
+		重新定义关联表的顺序
+		外连接转换为内连接
+		使用等价变换规则
+		优化count(), min(), max()
+		预估并转换为常数表达式
+		覆盖扫描索引
+		子查询优化
+		提前终止查询
+		等值传播
+		列表In的比较 ： in() log(n) ; or() : n
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;4, 查询优化器的限制&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;关联子查询
+union限制
+索引合并优化
+等值传递
+并行执行
+哈希关联
+松散索引扫描
+最大值与最小值
+在同一个表上查询和更新
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;5，查询优化器的提示(hint)&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;high_prioriy/low_prioriy
+delayed
+straign_join 
+sql_small_result/sql_big_result
+sql_buffer_result
+sql_cache/sql_no_cache
+sql_cal_found_rows
+for update/lock in share mode
+use index/force index/ignore index
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;6, 优化特定查询&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;优化count() 
+优化关联查询
+优化子查询
+优化group by/distinct
+优化limit
+优化union
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;7，总结&lt;/p&gt;
+
+&lt;p&gt;尽量少做
+不做
+尽可能快的完成&lt;/p&gt;
+
+</description>
+				<pubDate>Sat, 30 Mar 2019 21:58:59 +0800</pubDate>
+				<link>/blog/optimize-search.html</link>
+				<guid isPermaLink="true">/blog/optimize-search.html</guid>
+			</item>
+		
+			<item>
+				<title>高性能索引</title>
+				<description>&lt;p&gt;1, 索引类型&lt;/p&gt;
+
+&lt;p&gt;1.1, B-Tree&lt;/p&gt;
+
+&lt;p&gt;a, 有效规则：&lt;/p&gt;
+
+&lt;p&gt;全值匹配
+匹配最左前缀
+匹配列前缀
+匹配范围值
+精确匹配某一列并范围另一列
+只访问索引的查询&lt;/p&gt;
+
+&lt;p&gt;b, 限制：&lt;/p&gt;
+
+&lt;p&gt;如果不是最左索引开始，不能使用索引
+不能跳过索引的列
+查询中包含范围查询，右边的所有列都不能使用索引&lt;/p&gt;
+
+&lt;p&gt;1.2, Hash&lt;/p&gt;
+
+&lt;p&gt;a, 有效规则&lt;/p&gt;
+
+&lt;p&gt;只有精确匹配索引的列才有效&lt;/p&gt;
+
+&lt;p&gt;b, 限制：&lt;/p&gt;
+
+&lt;p&gt;只包含索引值和行指针
+不是按照顺序存储， 不能排序
+不支持部分索引查询
+只支持相等(= &amp;lt;&amp;gt; in )
+速度快，哈希冲突会减慢&lt;/p&gt;
+
+&lt;p&gt;1.3， 自适应索引&lt;/p&gt;
+
+&lt;p&gt;索引值被频繁使用，会在内存中简历B-Tree上建立hash索引&lt;/p&gt;
+
+&lt;p&gt;1.4 空间索引&lt;/p&gt;
+
+&lt;p&gt;1.5 全文索引&lt;/p&gt;
+
+&lt;p&gt;1.6 其他索引&lt;/p&gt;
+
+&lt;p&gt;2, 优点&lt;/p&gt;
+
+&lt;p&gt;减少服务器扫描数量
+避免服务器排序和临时表
+随机IO转变为顺序IO&lt;/p&gt;
+
+&lt;p&gt;3，策略&lt;/p&gt;
+
+&lt;p&gt;独立的列
+前缀索引和索引选择性 索引部分字符，减少索引空间，提高索引效率； 索引选择性： 不重复索引值/总的记录数
+多列索引&lt;/p&gt;
+
+&lt;p&gt;多个索引做相交操作，需要包含所有相关的索引项目
+多个索引操作时，耗费大量CPU，内存等资源
+优化器不会将其计算到查询成本&lt;/p&gt;
+
+&lt;p&gt;选择合适的索引顺序&lt;/p&gt;
+
+&lt;p&gt;不考虑分组和排序，区分度较高的列放在前面是好的；where语句包含索引部分前缀列的选择性更好；与数据分布有关系&lt;/p&gt;
+
+&lt;p&gt;聚簇索引 ： 数据存放在叶子结点，数据行跟相邻的键值紧凑的存放在一起&lt;/p&gt;
+
+&lt;p&gt;a, 优点&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;相关数据存放在一起，较少磁盘IO
+访问数据更快
+使用覆盖索引可以直接使用主键值
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;b, 缺点&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;若索引数据全部可以放在内存，聚簇索引优势不明显
+插入速度依赖插入顺序
+更新聚簇索引代价很高
+聚簇索引可能导致全表扫描
+二级索引（非聚簇索引）比想象的大，包含主键索引的列
+二级索引需要两次索引查处
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;覆盖索引 包含所有查询字段的值
+使用索引排序 只有索引列跟order by的子句顺序完全一致，并且排序方向是的一样的，MySQL才能使用索引排序。&lt;/p&gt;
+
+&lt;p&gt;压缩索引
+冗余与重复索引&lt;/p&gt;
+
+&lt;p&gt;4， 索引和表的维护&lt;/p&gt;
+
+&lt;p&gt;MyISAM表损坏通常是系统崩溃导致。
+使用repaire table修复表。
+执行optimize table或者导出再倒入重新整理数据，对于不支持这个草走的可以通过alter table &lt;tableName&gt; engine=&lt;engine&gt;来完成。&lt;/engine&gt;&lt;/tableName&gt;&lt;/p&gt;
+
+</description>
+				<pubDate>Sat, 30 Mar 2019 12:32:00 +0800</pubDate>
+				<link>/blog/index.html</link>
+				<guid isPermaLink="true">/blog/index.html</guid>
+			</item>
+		
+			<item>
 				<title>接口与内部类</title>
 				<description>&lt;p&gt;1， 接口&lt;/p&gt;
 
@@ -417,28 +658,28 @@ A. 阻塞
 				<description>&lt;p&gt;1 Exectors.newCachedThreadPool(无界线程池，可以进行自动回收)
 &lt;small&gt;无界队列，阻塞队列使用SynchronousQueue（每个插入操作对应一个移除操作)&lt;/small&gt;&lt;/p&gt;
 
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ExecutorService&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;newCachedThreadPool&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  
-		&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ThreadPoolExecutor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MAX_VALUE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;60L&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; 
-		&lt;span class=&quot;n&quot;&gt;TimeUnit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;SECONDS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SynchronousQueue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Runnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;());&lt;/span&gt;  
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ExecutorService&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;newCachedThreadPool&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  
+		&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ThreadPoolExecutor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MAX_VALUE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;60L&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; 
+		&lt;span class=&quot;nc&quot;&gt;TimeUnit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;SECONDS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SynchronousQueue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Runnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;());&lt;/span&gt;  
 	&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;2 Exectors.newFixedThreadPool(固定线程池)
 &lt;small&gt;corePoolSize和maximumPoolSize的大小是一样的，不想实现Keep alive，队列无界。&lt;/small&gt;&lt;/p&gt;
 
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ExecutorService&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;newFixedThreadPool&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nThreads&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ExecutorService&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;newFixedThreadPool&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nThreads&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  
 		&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ThreadPoolExecutor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nThreads&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nThreads&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0L&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; 
-		&lt;span class=&quot;n&quot;&gt;TimeUnit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MILLISECONDS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LinkedBlockingQueue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Runnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;());&lt;/span&gt;  
+		&lt;span class=&quot;nc&quot;&gt;TimeUnit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MILLISECONDS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LinkedBlockingQueue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Runnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;());&lt;/span&gt;  
 	&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;  
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;3 Exectors.newSingleThreadPool(单个线程池)&lt;/p&gt;
 
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ExecutorService&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;newSingleThreadExecutor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ExecutorService&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;newSingleThreadExecutor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  
 		&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;FinalizableDelegatedExecutorService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
 		&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ThreadPoolExecutor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0L&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; 
-		&lt;span class=&quot;n&quot;&gt;TimeUnit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MILLISECONDS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LinkedBlockingQueue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Runnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;()));&lt;/span&gt;  
+		&lt;span class=&quot;nc&quot;&gt;TimeUnit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MILLISECONDS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LinkedBlockingQueue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Runnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;()));&lt;/span&gt;  
 	&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
@@ -669,368 +910,6 @@ session.setMaxInactiveInterval(interval);
 				<pubDate>Wed, 24 Feb 2016 22:44:00 +0800</pubDate>
 				<link>/blog/nio-buffer.html</link>
 				<guid isPermaLink="true">/blog/nio-buffer.html</guid>
-			</item>
-		
-			<item>
-				<title>线程总结</title>
-				<description>&lt;h1 id=&quot;线程同步&quot;&gt;线程同步：&lt;/h1&gt;
-&lt;ul&gt;
-  &lt;li&gt;不变形&lt;/li&gt;
-  &lt;li&gt;枷锁&lt;/li&gt;
-  &lt;li&gt;线程封闭&lt;/li&gt;
-  &lt;li&gt;栈封闭&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;deque-blockdeque&quot;&gt;Deque BlockDeque&lt;/h2&gt;
-
-&lt;h3 id=&quot;线程窃取&quot;&gt;线程窃取&lt;/h3&gt;
-&lt;h1 id=&quot;线程状态&quot;&gt;线程状态：&lt;/h1&gt;
-&lt;ol&gt;
-  &lt;li&gt;新建&lt;/li&gt;
-  &lt;li&gt;就绪&lt;/li&gt;
-  &lt;li&gt;阻塞&lt;/li&gt;
-  &lt;li&gt;运行&lt;/li&gt;
-  &lt;li&gt;死亡&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h1 id=&quot;concurrenthashmapstringfuture&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ConcurrentHashMap&amp;lt;String,Future&amp;lt;?&amp;gt;&amp;gt;&lt;/code&gt;&lt;/h1&gt;
-
-&lt;h1 id=&quot;可变状态是至关重要的&quot;&gt;可变状态是至关重要的&lt;/h1&gt;
-&lt;ul&gt;
-  &lt;li&gt;可变状态越少，越容易保证线程安全&lt;/li&gt;
-  &lt;li&gt;尽量将域声明为final&lt;/li&gt;
-  &lt;li&gt;不可变对象一定是线程安全的&lt;/li&gt;
-  &lt;li&gt;封装有助于管理复杂性&lt;/li&gt;
-  &lt;li&gt;锁控制可变变量&lt;/li&gt;
-  &lt;li&gt;保证同一个不变性条件的所有变量时，需要使用锁&lt;/li&gt;
-  &lt;li&gt;进行复合操作需要锁&lt;/li&gt;
-  &lt;li&gt;禁止随意推断不需要加锁&lt;/li&gt;
-  &lt;li&gt;同步策略文档化&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;同步工具类&quot;&gt;同步工具类&lt;/h1&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;栅栏Barrier CycleBarrier Exchange&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;闭锁用于等待事件，而栅栏用于等待线程。&lt;/p&gt;
-&lt;ol&gt;
-  &lt;li&gt;信号量Semaphore&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;控制同时访问特定资源的数量。二值信号量互斥。&lt;/p&gt;
-&lt;ol&gt;
-  &lt;li&gt;闭锁CountDownLatch  FutureTask&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;延迟到线程的进度到达终止状态，&lt;/p&gt;
-
-&lt;h1 id=&quot;executorservice&quot;&gt;ExecutorService&lt;/h1&gt;
-&lt;p&gt;CompletionService  Executor BlockQueue&lt;/p&gt;
-
-&lt;h1 id=&quot;线程池&quot;&gt;线程池&lt;/h1&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;newFixedThreadPool&lt;/li&gt;
-  &lt;li&gt;newCachedThreadPool&lt;/li&gt;
-  &lt;li&gt;newSchedueledThreadPool&lt;/li&gt;
-  &lt;li&gt;newSingleThreadPool&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;em&gt;shutdown 平缓关闭，等待正在执行的完成，取消将要执行的线程&lt;/em&gt;
-&lt;em&gt;shutdownNow 取消所有正在运行的任务，不启动在队列中的任务&lt;/em&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;DelayQueue
-  管理一组Delayed对象，每个对象都有一个延迟时间，只有某个元素逾期后才执行take操作，按照延迟时间排序。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;ReentrantLock
-  定时
-  重入
-  可中断&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;ReadWriteLock&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;ReentrantReadWriteLock&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Condition内置条件队列&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;AQS&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;boolean acquire() throws InterruptedException {
-	while(当前状态不允许操作) {
-		if(需要阻塞获取请求) {
-			如果当前线程不在队列中，则将其插入队列
-			阻塞当前线程
-		}
-		eles
-			返回失败
-	}
-	可能更新同步器状态
-	如果线程位于队列中，将其移除队列
-	返回成功
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;void release() {
-	更新同步器状态
-	if(新的状态允许某个被阻塞的线程获取成功) {
-		解除队列中一个或者多个阻塞状态
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&quot;原子类&quot;&gt;原子类&lt;/h1&gt;
-&lt;ul&gt;
-  &lt;li&gt;AtomicInteger&lt;/li&gt;
-  &lt;li&gt;AtomicReference&lt;V&gt;&lt;/V&gt;&lt;/li&gt;
-  &lt;li&gt;AtomicReferenceFieldUpdate&amp;lt;Node,Node&amp;gt;&lt;/li&gt;
-  &lt;li&gt;AtomicStampReference&lt;V&gt;&lt;/V&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;内存模型&quot;&gt;内存模型&lt;/h1&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;重排列&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Happens-Before规则：
- 程序顺序规则
- 监视器规则
- voliate变量规则
- 线程启动规则
- 中断规则
- 终结器规则
- 传递性&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;当缺少Happens-Before规则时候，就可能出现重排列&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h1 id=&quot;improve&quot;&gt;Improve&lt;/h1&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;queue arrayList -&amp;gt; LinkedList&amp;lt;&amp;gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-</description>
-				<pubDate>Wed, 24 Feb 2016 22:44:00 +0800</pubDate>
-				<link>/blog/Java-Concurrent-Best-Practise.html</link>
-				<guid isPermaLink="true">/blog/Java-Concurrent-Best-Practise.html</guid>
-			</item>
-		
-			<item>
-				<title>JVM架构</title>
-				<description>&lt;h1 id=&quot;jvm内存分配与使用受限于物理内存以及操作系统&quot;&gt;JVM内存分配与使用受限于物理内存以及操作系统&lt;/h1&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-XX:UserCompressedOops&lt;/code&gt; 压缩指针
-&lt;code class=&quot;highlighter-rouge&quot;&gt;-XX:+AggressiveOpts&lt;/code&gt; 添加设置额外的性能优化&lt;/p&gt;
-
-&lt;h1 id=&quot;vm生命周期&quot;&gt;VM生命周期：&lt;/h1&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;启动器&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;java ,javaw (windows platform),JNI_CreateJavaJVM,javaws (java web start)&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;解析命令行&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;-client/-server ,决定加载加载哪个JIT
-	设置堆大小和JIT编译器
-	若没有明确设置堆大小和JIT编译器，启动器会通过自动优化进行设置。
-	设置环境变量（LD_LIBARY_PATH,CLASSPATH)
-	若存在-jar ,启动器会从指定的JAR的manifest中查找Main-Class,否则从命令行读取
-	使用标准的Java本地接口(JNI)创建	HotSpot VM。
-	一旦创建并初始化HotSpot VM,就会加载Java Main-Class,启动器也会从中得到main方法参数。
-	通过JNI调用CallStaticVoidMethod调用Java main方法，将命令行传递。
-&lt;/p&gt;
-
-&lt;h1 id=&quot;类加载&quot;&gt;类加载&lt;/h1&gt;
-&lt;p&gt;对于给定的Java类或者接口，类加载会根据全称加载二进制类文件，定义Java类，然后创建类或接口的Java.lang.Class对象。若未能找到，则跑出NoClassDefFound。此外，类加载会对类的格式进行检查，若出错，则抛出ClassFormatError或UnSupportedClassVersionError。
-Java类加载器前，必须先加载所有超类和接口。
-若类的继承关系出错，抛出ClassCircularityError。若超类是接口或者接口是类，抛出InCompatibleClassChangeError
-&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;链接&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;检查文件的语义，常量池符号和类型，若出错抛出VerifyError.&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;准备&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;创建静态字段，初始化为默认值，分配方法表&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;解析&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;可选，&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;初始化&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;运行类构造器（需要先初始化超类，接口不需要）&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;基于性能考量，直到初始化阶段，才会加载和链接类&lt;/em&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;类加载委托&quot;&gt;类加载委托&lt;/h1&gt;
-&lt;p&gt;请求类加载器查找个加载某个类时，可以转而请求别的加载器来加载，称为加载委托。	
-	类的首个加载器为初始加载器，最终定义类的加载器为自定义类加载器。
-	类加载器之间是层次化关系，每个类加载器都一个委托其上一级的类加载器。
-	J2SE的加载顺序为：启动类加载器、扩展类加载器、系统加载器。其中系统类加载器是默认加载器，加载Main方法并从classpath加载类。
-	应用加载器是可以是自带加载器，也可以进行扩展。
-	启动类加载器由HotSpot VM实现，负责加载BOOTCLASSPATH中的类。
-	为加快启动顺序，Client模式可以通过类数据共享使用已经加载的类（-Xshare:on,仅Serial支持）
-&lt;/p&gt;
-
-&lt;h1 id=&quot;类型安全&quot;&gt;类型安全&lt;/h1&gt;
-&lt;p&gt;Java类由类加载器和全限量名称类共同决定。&lt;/p&gt;
-
-&lt;h1 id=&quot;元数据&quot;&gt;元数据&lt;/h1&gt;
-&lt;p&gt;类加载时，会在永久代创建instanceKlass(arrayKlass)。instanceKClass引用java.lang.Class,后者是前者的镜像，VM内部使用klassOop(普通对象指针)访问instanceKlass&lt;/p&gt;
-
-&lt;h1 id=&quot;内部类加载数据&quot;&gt;内部类加载数据&lt;/h1&gt;
-&lt;p&gt;加载过程，VM维护三个散列表，建立类名/类加载器（初始加载器和自定义加载器）/klassOop对象映射。PlaceHolderTable包含当前正在加载的类，用于检查ClassCircularityError。LoaderConstraintTable用于追踪类型安全检查的约束&lt;/p&gt;
-
-&lt;h1 id=&quot;字节码验证&quot;&gt;字节码验证&lt;/h1&gt;
-&lt;p&gt;静态验证和动态验证。
-	有些参数个数和参数类型在运行时候动态分析代码，方法如下：
-		方法推导：
-			对每个字节码进行抽象解释并在目标分支上进行类型合并。若未发现隐形类型或者适配，抛出VerfiyError。
-		类型检查：
-			编译器将目标分支或异常分支设置在code属性的StackMapTable中。StackMapTable包含多个栈映射帧，每个映射都会用字节码偏移量表示栈和局部变量的类型。
-&lt;/p&gt;
-
-&lt;h1 id=&quot;数据共享&quot;&gt;数据共享&lt;/h1&gt;
-&lt;p&gt;使用JRE时，安装程序会加载Jar中部分类，变成私有的内部表示并转储文件，称为共享文档。若没有该文件，也可以手动生成，之后调用VM，共享文档会映射到内存，减少加载数量。
-	VM在共享代引入新的子空间，用以包含共享数据，VM启动时，共享文档classes.jsa作为内存映射加载到永久代，随后VM内存管理系统管理该区域。
-&lt;/p&gt;
-
-&lt;h1 id=&quot;解释器&quot;&gt;解释器&lt;/h1&gt;
-&lt;p&gt;基于模板解释器，内部使用TemplateTable在内存中生成解释器，包含每个字节对应的机器代码，每个模板对应一个字节码。该方式由于switch.
-VM解释器自适应优化的一部分，直接用解释器运行程序，并检测热点，使用全局机器代码优化。
-&lt;/p&gt;
-
-&lt;h1 id=&quot;异常处理&quot;&gt;异常处理&lt;/h1&gt;
-&lt;p&gt;遇到与Java语义约束冲突，会触发异常处理程序。由VM解释器、JIT解释器和VM协同完成。处理方式：
-	本方法处理
-		同一方法抛出、捕获异常
-	方法外处理
-		退栈后调用异常处理程序
-	VM处理
-		VM查找异常处理程序
-&lt;/p&gt;
-
-&lt;h1 id=&quot;同步&quot;&gt;同步&lt;/h1&gt;
-&lt;p&gt;并发操作机制，用于预防、避免对资源的不当的交替使用（竞争），保证交替使用资源安全。Java使用线程实现并发。互斥是特殊的同步机制（同一时间仅最多有一个线程访问资源）。
-	VM使用monitor保证运行代码的互斥，可以解锁或加锁，任意时刻仅有一个线程获得monitor所有权（由synchronized block）。
-	线程去试图锁定拥有被线程占用的monitor时，等待直到所有者是否锁，才能获得。
-	大多数对象在生命周期最多只有一个线程，可以开启-XX:UseBiasedLocking允许线程自身使用偏向锁，开启后就不需要昂贵的原子操作来维护。
-	VM中由C1（-client JIT编译器）、C2 (-server JIT编译器)和解释器。在没有竞争情况下直接生产fast-path；需要阻塞和解锁(monitor-enter,monitor-exit),fast-path调用slow-path(c++实现)。
-	
-	VM内部表示的Java对象第一个字(word)包含同步状态编码：
-		中立：已经解锁
-		偏向：已经锁定/已经解锁且无共享
-		栈锁：已锁定且共享（共享意思是该标记指向锁对象在线程中标记子副本）
-		膨胀：已经锁定/已经解锁且共享和竞争。线程在moniter-enter(wait)阻塞，指向重的Object-monitor对象。
-&lt;/p&gt;
-
-&lt;h1 id=&quot;线程对象&quot;&gt;线程对象&lt;/h1&gt;
-&lt;h2 id=&quot;线程管理&quot;&gt;线程管理：&lt;/h2&gt;
-
-&lt;p&gt;从创建到终止的整个生命周期、HotSpot VM线程间协调。线程管理实现细节和平台相关。包括：
-	Java代码创建的线程
-	直接与HotSpot VM关联的线程
-	HotSpot其他目的建立的线程
-&lt;/p&gt;
-
-&lt;h2 id=&quot;线程模型&quot;&gt;线程模型：&lt;/h2&gt;
-&lt;p&gt;Java程序启动时候会创建一个本地操作的系统线程，当终止时，操作系统线程也会被回收。不同平台实现中的线程优先级与Java的映射不尽相同。&lt;/p&gt;
-
-&lt;h2 id=&quot;线程创建&quot;&gt;线程创建：&lt;/h2&gt;
-&lt;h3 id=&quot;vm引入线程方式&quot;&gt;VM引入线程方式：&lt;/h3&gt;
-&lt;p&gt;java.lang.Thread对象的start()
-JNI将已经存在的本地线程关联到VM上。&lt;/p&gt;
-
-&lt;h3 id=&quot;线程表示&quot;&gt;线程表示：&lt;/h3&gt;
-&lt;p&gt;java.lang.Thread实例以Java代码表示
-	VM内部以C++ JavaThread实例表示java.lang.Thread实例，其中包含其他线程的追踪状态。JavaThread内部指针指向Thread对象，也保存了OSThread的引用；Thread对象包含JavaThread的原始整数(Raw Int)。
-	OSThread表示操作系统线程。
-&lt;/p&gt;
-
-&lt;h3 id=&quot;线程启动过程&quot;&gt;线程启动过程：&lt;/h3&gt;
-&lt;p&gt;-》java.lang.Thread启动
-	-》VM使用attachCurrentThread关联本地线程，创建关联的JavaThread和OSThread，本地线程，
-	-》VM分配资源（本地存储和缓存、同步对象等）
-	-》本地线程初始化
-	-》Thead.run()
-	-》线程返回，处理未被捕获的异常
-	-》终止线程，检测是否终止VM
-	-》终止线程会是否分配的资源，移除JavaThread
-	-》调用OSThread和Java的析构函数
-	-》终止
-&lt;/p&gt;
-
-&lt;h3 id=&quot;线程状态&quot;&gt;线程状态：&lt;/h3&gt;
-&lt;p&gt;	新线程：线程在初始化过程中
-	线程在Java中：在执行Java代码
-	线程在VM中：在VM中执行
-	线程阻塞：由于（获取锁、阻塞IO等待条件等）被阻塞
-	Monitor_wait:等待获取竞争的监视锁
-	Condition_wait:等待VM的内部条件变量
-	Object_wait:Java线程在执行Object.wait()&lt;/p&gt;
-
-&lt;h3 id=&quot;vm内部线程&quot;&gt;VM内部线程：&lt;/h3&gt;
-&lt;p&gt;	VM线程：C++单例对象，负责VM操作
-	周期任务操作：C++单例对象（WatchedThread）,模拟计时器中断在VM中可以周期操作
-	垃圾回收线程：
-	JIT编译器线程：运行时编译，编译为字节码
-	信号分发线程：&lt;/p&gt;
-
-&lt;h3 id=&quot;vm操作和安全点&quot;&gt;VM操作和安全点：&lt;/h3&gt;
-&lt;p&gt;	VM内部VMThread监控VMOperationQueue的C++对象，等待对象出现VM操作，操作等到安全点才执行，所有的线程都阻塞。
-	垃圾回收是最出名的VM安全点操作（Stop-world阶段）、偏向锁撤销、线程栈转储、线程的挂起和停止以及JVMTI请求检查和更改操作。
-	VM通过协作、轮询创建安全点。
-	在安全点，VMThread用Threads_locks阻塞所有正在运行的线程，VM操作完成后，释放Threads_lock。&lt;/p&gt;
-
-&lt;h2 id=&quot;c堆管理&quot;&gt;C++堆管理&lt;/h2&gt;
-&lt;p&gt;VM使用C++堆存储VM内部结构和数据。Arena的一些子类负责管理VM C++堆操作，只提供给VM 使用，不会暴露给VM使用者。
-	Arena子类家里的malloc/free之上的一层，包含3个全局的ChunkPool，安装请求分配的大小由不同的部分高效操作。
-	Arena是一些缓存了一定数量内存空间的ThreadLocal对象。由于不需要共享全局锁，这就使得快速路径的分配成为可能。
-	Arena还用于ThreadLocal的资源和句柄管理。client和server模式的JIT compilers都使用Arena。&amp;lt;&lt;p&gt;p&amp;gt;
-			
-
-## Java本地接口
-&lt;p&gt;运行VM可以使用Java语言和其他语言进行协作。
-	JNI可以用来创建、检测和更新Java对象，调用Java对象、捕获并抛出异常、加载类并获取类信息以及执行运行时类型检查。
-	JNI和Invocation API，任意本地应用都可以嵌入Java VM。
-	但是，丧失平台独立性；Java时强语言类型，C/C++不是，调用前会进行安全检查。
-	VM命令行选项（-Xcheck：jni）可以辅助调试JNI本地方法。
-	VM追踪执行本地方法的线程必须小心。VM线程执行本地代码到达安全点时，继续执行本地代码，直到返回Java代码或JNI调用结束。&lt;/p&gt;
-	
-	
-## VM致命错误处理：
-&lt;p&gt;VM为开发者提供足够信息在诊断和修复VM致命错误。会产生hs_err_pid&lt;pid&gt;.log,包括内存镜像，执行输出位置-XX：ErrorFile;OOE也可以触发生成文件。
-	JKD1.6后，-XX:OnOutOfMemeoryError=&lt;cmd&gt; 抛出OOE时，执行&lt;cmd&gt;。
-	-XX：HeapDumpOnOutOfMemory -XX：HeapDump-Path=&lt;path&gt; 指定转储的文件路径&amp;lt;/p&amp;gt;
-	
-	
-# 垃圾收集器
-* Serial收集器
-* Parallel收集器
-* CMS
-* G1
-
-# JIT
-&lt;/path&gt;&lt;/cmd&gt;&lt;/cmd&gt;&lt;/pid&gt;&lt;/p&gt;&lt;/p&gt;&lt;/p&gt;
-</description>
-				<pubDate>Wed, 24 Feb 2016 22:44:00 +0800</pubDate>
-				<link>/blog/Performance-JVM.html</link>
-				<guid isPermaLink="true">/blog/Performance-JVM.html</guid>
 			</item>
 		
 	</channel>

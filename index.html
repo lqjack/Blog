@@ -71,6 +71,10 @@
                 </li>
                 
                 <li>
+                    <a href="/mutil_version_support.html">Java 多版本支持 思路</a>
+                </li>
+                
+                <li>
                     <a href="/tags.html">Tags</a>
                 </li>
                 
@@ -107,6 +111,61 @@
 	<div class="row">
 		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			
+<div class="post-preview">
+    <a href="/blog/optimize-search.html">
+        <h2 class="post-title">            
+            查询性能优化
+        </h2>
+        
+        <div class="post-content-preview">
+            1, 慢查询基础
+
+向数据库请求了不需要的数据
+
+响应时间 服务时间 + 等待时间（IO/锁）
+
+扫描表 通过设置db_block_multiblock_read_count可以设置一次IO能读取的数据块个数，从而有效减少全表扫描时的IO总次数，也就是通过预读机制将将要访问的数据块预先读入内存...
+        </div>
+    </a>
+    <p class="post-meta">Posted by Jack on March 30, 2019</p>
+</div>
+
+<hr>
+
+<div class="post-preview">
+    <a href="/blog/index.html">
+        <h2 class="post-title">            
+            高性能索引
+        </h2>
+        
+        <div class="post-content-preview">
+            1, 索引类型
+
+1.1, B-Tree
+
+a, 有效规则：
+
+全值匹配
+匹配最左前缀
+匹配列前缀
+匹配范围值
+精确匹配某一列并范围另一列
+只访问索引的查询
+
+b, 限制：
+
+如果不是最左索引开始，不能使用索引
+不能跳过索引的列
+查询中包含范围查询，右边的所有列都不能使用索引
+
+1.2, Ha...
+        </div>
+    </a>
+    <p class="post-meta">Posted by Jack on March 30, 2019</p>
+</div>
+
+<hr>
+
 <div class="post-preview">
     <a href="/blog/interface_and_inner_class.html">
         <h2 class="post-title">            
@@ -240,45 +299,6 @@ if(...
 
 <hr>
 
-<div class="post-preview">
-    <a href="/blog/Distribute-session.html">
-        <h2 class="post-title">            
-            分布式Session
-        </h2>
-        
-        <div class="post-content-preview">
-            1、Session生命周期
-
-
-创建
-Session创建再服务端，当请求JSP,Servlet时候才会创建（包含SessionId)，默认情况下服务端会将JSESSIONID通过Cookie发送给客户端，一般maxAge属性为-1,表示仅对当前浏览器有效，各个浏览器窗口不共享，关闭浏览器就会失...
-        </div>
-    </a>
-    <p class="post-meta">Posted by Jack on February 24, 2016</p>
-</div>
-
-<hr>
-
-<div class="post-preview">
-    <a href="/blog/nio-buffer.html">
-        <h2 class="post-title">            
-            NIO Buffer
-        </h2>
-        
-        <div class="post-content-preview">
-            内部元素
-
-  内容： 包含基本类型，线性、有限特定基本类型序列。
-  容量（capacity) : Buffer对象最大能写入的大小、不变量。
-  最大读取位置(limit) : Buffer对象当前写入的最大位置，读取时候最大的读取位置。
-  当前位置(position) : 当前索引，下...
-        </div>
-    </a>
-    <p class="post-meta">Posted by Jack on February 24, 2016</p>
-</div>
-
-<hr>
-
 
 <!-- Pager -->
 
@@ -402,7 +422,7 @@ Session创建再服务端，当请求JSP,Servlet时候才会创建（包含Sessi
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2019 lqjack ♪ Powered by Jack.
+                &copy; 2011~2020 lqjack ♪ Powered by Jack.
                 </p>
             </div>
         </div>

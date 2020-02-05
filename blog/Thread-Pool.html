@@ -71,6 +71,10 @@
                 </li>
                 
                 <li>
+                    <a href="/mutil_version_support.html">Java 多版本支持 思路</a>
+                </li>
+                
+                <li>
                     <a href="/tags.html">Tags</a>
                 </li>
                 
@@ -123,28 +127,28 @@
                 <p>1 Exectors.newCachedThreadPool(无界线程池，可以进行自动回收)
 <small>无界队列，阻塞队列使用SynchronousQueue（每个插入操作对应一个移除操作)</small></p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="kd">public</span> <span class="kd">static</span> <span class="n">ExecutorService</span> <span class="nf">newCachedThreadPool</span><span class="o">()</span> <span class="o">{</span>  
-		<span class="k">return</span> <span class="k">new</span> <span class="nf">ThreadPoolExecutor</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">,</span><span class="mi">60L</span><span class="o">,</span> 
-		<span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">,</span><span class="k">new</span> <span class="n">SynchronousQueue</span><span class="o">&lt;</span><span class="n">Runnable</span><span class="o">&gt;());</span>  
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="kd">public</span> <span class="kd">static</span> <span class="nc">ExecutorService</span> <span class="nf">newCachedThreadPool</span><span class="o">()</span> <span class="o">{</span>  
+		<span class="k">return</span> <span class="k">new</span> <span class="nf">ThreadPoolExecutor</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">,</span><span class="mi">60L</span><span class="o">,</span> 
+		<span class="nc">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">,</span><span class="k">new</span> <span class="nc">SynchronousQueue</span><span class="o">&lt;</span><span class="nc">Runnable</span><span class="o">&gt;());</span>  
 	<span class="o">}</span> 
 </code></pre></div></div>
 
 <p>2 Exectors.newFixedThreadPool(固定线程池)
 <small>corePoolSize和maximumPoolSize的大小是一样的，不想实现Keep alive，队列无界。</small></p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="kd">public</span> <span class="kd">static</span> <span class="n">ExecutorService</span> <span class="nf">newFixedThreadPool</span><span class="o">(</span><span class="kt">int</span> <span class="n">nThreads</span><span class="o">)</span> <span class="o">{</span>  
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="kd">public</span> <span class="kd">static</span> <span class="nc">ExecutorService</span> <span class="nf">newFixedThreadPool</span><span class="o">(</span><span class="kt">int</span> <span class="n">nThreads</span><span class="o">)</span> <span class="o">{</span>  
 		<span class="k">return</span> <span class="k">new</span> <span class="nf">ThreadPoolExecutor</span><span class="o">(</span><span class="n">nThreads</span><span class="o">,</span> <span class="n">nThreads</span><span class="o">,</span><span class="mi">0L</span><span class="o">,</span> 
-		<span class="n">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">,</span><span class="k">new</span> <span class="n">LinkedBlockingQueue</span><span class="o">&lt;</span><span class="n">Runnable</span><span class="o">&gt;());</span>  
+		<span class="nc">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">,</span><span class="k">new</span> <span class="nc">LinkedBlockingQueue</span><span class="o">&lt;</span><span class="nc">Runnable</span><span class="o">&gt;());</span>  
 	<span class="o">}</span>  
 </code></pre></div></div>
 
 <p>3 Exectors.newSingleThreadPool(单个线程池)</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="kd">public</span> <span class="kd">static</span> <span class="n">ExecutorService</span> <span class="nf">newSingleThreadExecutor</span><span class="o">()</span> <span class="o">{</span>  
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="kd">public</span> <span class="kd">static</span> <span class="nc">ExecutorService</span> <span class="nf">newSingleThreadExecutor</span><span class="o">()</span> <span class="o">{</span>  
 		<span class="k">return</span> <span class="k">new</span> <span class="nf">FinalizableDelegatedExecutorService</span><span class="o">(</span>
 		<span class="k">new</span> <span class="nf">ThreadPoolExecutor</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="mi">0L</span><span class="o">,</span> 
-		<span class="n">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">,</span>
-		<span class="k">new</span> <span class="n">LinkedBlockingQueue</span><span class="o">&lt;</span><span class="n">Runnable</span><span class="o">&gt;()));</span>  
+		<span class="nc">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">,</span>
+		<span class="k">new</span> <span class="nc">LinkedBlockingQueue</span><span class="o">&lt;</span><span class="nc">Runnable</span><span class="o">&gt;()));</span>  
 	<span class="o">}</span>
 </code></pre></div></div>
 
@@ -459,7 +463,7 @@ var duoshuoQuery = {short_name:"azeril"};
 
                 </ul>
                 <p class="copyright text-muted">
-                &copy; 2011~2019 lqjack ♪ Powered by Jack.
+                &copy; 2011~2020 lqjack ♪ Powered by Jack.
                 </p>
             </div>
         </div>
