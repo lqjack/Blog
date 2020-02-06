@@ -2,11 +2,11 @@
 layout: page
 title: "About"
 description: "嘿，你总算找到我啦"
-header-img: "img/plane.jpg"
+header-img: "images/plane.jpg"
 ---
 
 <center>
-    <p><img src="http://dreamofbook.qiniudn.com/Zero.png" align="center"></p>
+    <p><img src="/images/Zero.png" align="center"></p>
 </center>
 
 Ehhhh...I know it's not a good question.
@@ -21,5 +21,5 @@ My Name is Jack. You may find me in sites like douban.com / Goodreads.com / Face
 > Live long and prosper
 
 <center>
-    <p><img src="http://dreamofbook.qiniudn.com/hacker.png" align="center"></p>
+    <p><img src="/images/hacker.png" align="center"></p>
 </center>

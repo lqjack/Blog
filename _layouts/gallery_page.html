@@ -24,7 +24,7 @@ layout: page
     <div class="gallery-image-wrapper">
         <a name="{{ image.name }}"></a>
         <a href="{{ image.name }}"{% if site.gallery.lightbox %} rel="lightbox[{{ page.gallery }}]"{% endif %}>
-            <img class="gallery-image" src="thumbs/{{ image.name }}" />
+            <img class="gallery-image" src="/images/thumbs/{{ image.name }}" />
         </a>
     </div>
 {% endfor %}

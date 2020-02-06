@@ -1,6 +1,6 @@
 title: Jack's Blog
 SEOTitle: 博客 | Jack Blog
-header-img: "img/autumn2.jpg"
+header-img: "images/autumn2.jpg"
 tagline: ""  
 description: "Java 开发 ｜ Golang 开发 & Service Mesh | 这里是 @Jack 的个人博客💪!"
 url: "https://lqjack.github.io/"
@@ -24,7 +24,6 @@ zhihu_username: lqjacklee
 permalink: pretty
 paginate: 5
 textColor: #FF0000
-highlighter: rouge
 paginate_path: "page:num"
 exclude: ["less","node_modules","Gruntfile.js","package.json","README.md","yarn.lock"]
 anchorjs: true
@@ -48,7 +47,7 @@ owner:
 
 # Data
 gavatar: https://dreamofbook.qiniudn.com/Az..png
-favicon: img/favicon.ico
+favicon: images/favicon.ico
 
 
 # Markdown settings
@@ -78,13 +77,14 @@ plugins:
 - jekyll-mermaid
 - jekyll-seo-tag
 
-gitalk:
-   enable: true
-   owner: lqjack
-   repo: lqjack.github.io
-   clientID: a6589d87a7b777669521
-   clientSecret: 5380e798fe628ba34f472dbf54515cf10f233f00
-   admin: lqjack
+comments:
+  gitalk: true
+  gitalk_clientID: 'a6589d87a7b777669521'
+  gitalk_Secret: '5380e798fe628ba34f472dbf54515cf10f233f00'
+  gitalk_repo: 'lqjack.github.io'
+  gitalk_owner: 'lqjack'
+  gitalk_admin: 'lqjack'
+  distractionFreeMode: true
 
 # Defaults for posts
 defaults:
@@ -138,7 +138,7 @@ ga_domain: auto
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
 sidebar-about-description: “Stash foolish , Stash hard💪"
-sidebar-avatar: /img/avatar-hux-ny.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
+sidebar-avatar: /images/avatar-hux-ny.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
 

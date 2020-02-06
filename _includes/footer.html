@@ -89,6 +89,8 @@
     </div>
 </footer>
 
+<div id='gitalk-container'></div>
+
 <!-- baidu analysis -->
 <script>
 var _hmt = _hmt || [];
@@ -126,4 +128,18 @@ var _hmt = _hmt || [];
     async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
         hljs.initHighlightingOnLoad();
     })
+</script>
+
+<script>
+    const gitalk = new Gitalk({
+        clientID: 'GitHub Application Client ID',
+        clientSecret: 'GitHub Application Client Secret',
+        repo: 'GitHub repo',
+        owner: 'GitHub repo owner',
+        admin: ['GitHub repo owner and collaborators, only these guys can initialize github issues'],
+        id: location.pathname,      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    })
+
+    gitalk.render('gitalk-container')
 </script>
