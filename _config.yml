@@ -26,7 +26,7 @@ paginate: 5
 textColor: #FF0000
 highlighter: rouge
 paginate_path: "page:num"
-exclude: ["less","node_modules","Gruntfile.js","package.json","README.md"]
+exclude: ["less","node_modules","Gruntfile.js","package.json","README.md","yarn.lock"]
 anchorjs: true
 # If you have timezone issue (e.g. #68) in China, uncomment to use this:
 timezone: CN
@@ -37,7 +37,7 @@ b2t: true
 # Gems
 # from PR#40, to support local preview for Jekyll 3.0
 # make sure you have this gem installed
-gems: [jekyll-sitemap]
+#gems: [jekyll-sitemap]
 
 
 
@@ -76,7 +76,6 @@ plugins:
 - jekyll-gallery-generator
 - jekyll-paginate
 - jekyll-mermaid
-- jekyll-sitemap
 - jekyll-seo-tag
 
 gitalk:
